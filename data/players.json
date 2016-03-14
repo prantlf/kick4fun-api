@@ -1,0 +1,62 @@
+[
+  {
+    "id": "anja",
+    "fullname": "Anja Klement",
+    "nickname": "Anja"
+  },
+  {
+    "id": "claus",
+    "fullname": "Claus Ilmberger",
+    "nickname": "Clausi"
+  },
+  {
+    "id": "ferda",
+    "fullname": "Ferdinand Prantl",
+    "nickname": "Ferda"
+  },
+  {
+    "id": "josef",
+    "fullname": "Josef König",
+    "nickname": "Josef"
+  },
+  {
+    "id": "katja",
+    "fullname": "Katja Tribulowski",
+    "nickname": "Katja"
+  },
+  {
+    "id": "lio",
+    "fullname": "Lionel Spohr",
+    "nickname": "Messi"
+  },
+  {
+    "id": "manfred",
+    "fullname": "Manfred Rottner",
+    "nickname": "Manfred"
+  },
+  {
+    "id": "peter",
+    "fullname": "Peter Sturm",
+    "nickname": "Anja"
+  },
+  {
+    "id": "reinhard",
+    "fullname": "Reinhard Loch",
+    "nickname": "Reininho"
+  },
+  {
+    "id": "stefano",
+    "fullname": "Stefano Laurichella",
+    "nickname": "Stefano"
+  },
+  {
+    "id": "szabi",
+    "fullname": "Szabolcs Gyula Smile",
+    "nickname": "Szabi"
+  },
+  {
+    "id": "uschi",
+    "fullname": "Ursula Schreyer",
+    "nickname": "Uschi"
+  }
+]

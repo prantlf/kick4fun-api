@@ -1,0 +1,47 @@
+{
+  "type": "pyramide",
+  "name": "OTSAP Kicker Sommerliga 2016",
+  "status": "planned",
+  "participants": [
+    "reinhard",
+    "claus",
+    "ferda",
+    "manfred",
+    "lio",
+    "katja",
+    "anja",
+    "stefano",
+    "uschi",
+    "peter",
+    "szabi",
+    "josef"
+  ],
+  "matches": [
+  ],
+  "results": [
+    {
+      "id": 0,
+      "standings": [
+        {
+          "position": 1,
+          "player": "stefano",
+          "grade": 7,
+          "points": 56
+        },
+        {
+          "position": 2,
+          "player": "reinhard",
+          "grade": 6,
+          "points": 55
+        },
+        {
+          "position": 3,
+          "player": "josef",
+          "grade": 6,
+          "points": 55
+        }
+      ]
+    }
+  ]
+}
+
