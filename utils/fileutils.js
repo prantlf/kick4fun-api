@@ -1,12 +1,24 @@
 var fs = require('fs');
 var path = require('path');
 
-function FileUtils () {}
-
-FileUtils.getAllPlayers = function() {
-    var players = { 'error': 'Could not read file.' };
-    fs.readFileSync(path.join(__dirname, '../data/players.json'), 'utf-8', function (err, data) {
-        players = data;
-    });
-    return players;
+module.exports = {
+    getObjFromFile: function(file) {
+       return JSON.parse(fs.readFileSync(path.join(__dirname, '../data/', file)));
+    },
+    getAllPlayers: function () {
+        return fs.readFileSync(path.join(__dirname, '../data/players.json'));
+    },
+    getTournamentIdFromFile: function(file) {
+        return file.replace('tournament-', '').replace('.json', '');
+    },
+    getAllTournamentFiles: function() {
+        var fileNames = [];
+        var files = fs.readdirSync(path.join(__dirname, '../data'));
+        files.forEach(function (file) {
+            if (file.indexOf('tournament-') == 0) {
+                fileNames.push(file);
+            }
+        });
+        return fileNames;
+    }
 };
