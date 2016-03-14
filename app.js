@@ -23,8 +23,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/players', players);
-app.use('/tournaments', tournaments);
+app.use('/api/players', players);
+app.use('/api/tournaments', tournaments);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
