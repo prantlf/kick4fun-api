@@ -4,21 +4,15 @@ var fileUtils = require('../utils/fileUtils');
 var router = express.Router();
 
 router.get('/', function (reg, res, next) {
-    var players = JSON.parse(fileUtils.getAllPlayers());
+    var players = fileUtils.getObjFromFile('players.json');
     var fragments = reg.baseUrl.split('/');
-    var tournament = fragments[fragments.length-2];
-    var files = fileUtils.getAllTournamentFiles();
+    var tournament = fragments[fragments.length - 2];
+    var file = fileUtils.getTournamentFileFromId(tournament);
     var participantIds = [];
-    files.forEach(function (file) {
-        if (participantIds.length === 0) {
-            var tournamentId = fileUtils.getTournamentIdFromFile(file);
-            if (tournamentId === tournament) {
-                var obj = fileUtils.getObjFromFile(file);
-                participantIds = obj.participants;
-                return false;
-            }
-        }
-    });
+    if (file !== null) {
+        var obj = fileUtils.getObjFromFile(file);
+        participantIds = obj.participants;
+    }
     var participants = [];
     players.forEach(function (player) {
         if (participantIds.indexOf(player.id) >= 0) {
