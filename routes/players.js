@@ -5,7 +5,7 @@ var router = express.Router();
 
 /* GET all players listing. */
 router.get('/', function (req, res, next) {
-    res.send(fileUtils.getAllPlayers());
+    res.send(fileUtils.getJsonFromFile('players.json'));
 });
 
 module.exports = router;

@@ -2,11 +2,11 @@ var fs = require('fs');
 var path = require('path');
 
 module.exports = {
-    getObjFromFile: function(file) {
-       return JSON.parse(fs.readFileSync(path.join(__dirname, '../data/', file)));
+    getJsonFromFile: function (file) {
+        return fs.readFileSync(path.join(__dirname, '../data/', file));
     },
-    getAllPlayers: function () {
-        return fs.readFileSync(path.join(__dirname, '../data/players.json'));
+    getObjFromFile: function(file) {
+       return JSON.parse(getJsonFromFile(file));
     },
     getTournamentIdFromFile: function(file) {
         return file.replace('tournament-', '').replace('.json', '');
