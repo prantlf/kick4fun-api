@@ -6,7 +6,13 @@ router.get('/', function (reg, res, next) {
 });
 
 router.post('/', function (reg, res, next) {
-    res.send('posted');
+    var match = reg.body;
+    var ok = verifyMatch(match);
+    res.send(match);
 });
 
 module.exports = router;
+
+function verifyMatch(match) {
+    return true;
+}
