@@ -1,21 +1,21 @@
 var mongoose = require('mongoose');
+var utils = require('../utils/utils');
 
 const TournamentSchema = new mongoose.Schema({
-    name: {type: String, default: ''},
-    fullname: {type: String, default: ''},
+    type: {type: String, default:'league', enum:['league', 'challenge']},
+    id: {type: String, default: ''},
+    description: {type: String, default: ''},
     organization: {type: String, default: ''},
     status: {type: String, default: 'planned', enum: ['planned', 'progress', 'completed']},
     participants: [String]
 });
 
-TournamentSchema.path('name').validate(function (name, fn) {
-    const tournament = mongoose.model('Tournament');
-    // Check only when it is a new tournament or when name is modified
-    if (this.isNew || this.isModified('name')) {
-        tournament.find({ name: name }).exec(function (err, tournaments) {
-            fn(!err && tournaments.length === 0);
-        });
-    } else fn(true);
-}, 'Name already exists');
+TournamentSchema
+    .path('description').required(true, 'Description must be set.')
+
+    .pre('save', function (next) {
+        this.id = utils.guid();
+    })
+;
 
 mongoose.model('Tournament', TournamentSchema);

@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 
 const PlayerSchema = new mongoose.Schema({
     name: {type: String, default: ''},
-    fullname: {type: String, default: ''},
-    nickname: {type: String, default: ''},
+    fullName: {type: String, default: ''},
+    nickName: {type: String, default: ''},
     organization: {type: String, default: ''}
 });
 

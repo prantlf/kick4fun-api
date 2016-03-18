@@ -3,8 +3,8 @@ var mongoose = require('mongoose');
 const MatchSchema = new mongoose.Schema({
     id: {type: Number, min: 1},
     date: {type: Date},
-    team1: [{type: String, notEmpty: true, check: {minLength: 1, maxLength: 2}}],
-    team2: [{type: String, notEmpty: true, check: {minLength: 1, maxLength: 2}}],
+    team1: [{type: String, check: {minLength: 1, maxLength: 2}}],
+    team2: [{type: String, check: {minLength: 1, maxLength: 2}}],
     result: [Number]
 });
 
@@ -13,6 +13,7 @@ MatchSchema
         if (result.length % 2 !== 0) {
             return false;
         }
+        var i;
         for (i = 0; i < result.length; i += 2) {
             if (result[i] === result[i + 1]) {
                 return false;
@@ -22,7 +23,7 @@ MatchSchema
     }, 'Result is inconsistent')
 
     .virtual('sets').get(function () {
-        var s1 = 0, s2 = 0;
+        var s1 = 0, s2 = 0, i;
         for (i = 0; i < this.result.length; i += 2) {
             if (this.result[i] > this.result[i + 1]) {
                 s1++;
@@ -34,7 +35,7 @@ MatchSchema
     })
 
     .virtual('goals').get(function () {
-        var g1 = 0, g2 = 0;
+        var g1 = 0, g2 = 0, i;
         for (i = 0; i < this.result.length; i += 2) {
             g1 += result[i];
             g2 += result[i + 1];
