@@ -7,7 +7,7 @@ const TournamentSchema = new mongoose.Schema({
         default: 'league',
         enum: ['league', 'challenge']
     },
-    id: {
+    uniqueId: {
         type: String,
         default: ''
     },
@@ -19,17 +19,35 @@ const TournamentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
     status: {
         type: String,
         default: 'planned',
-        enum: ['planned', 'progress', 'completed']
+        enum: [
+            'planned',      // not yet set up completely
+            'progress',     // with partial results
+            'completed',    // with complete results
+            'archived'      // intermediate standings removed
+        ]
     },
     participants: [String]
 });
 
-TournamentSchema.pre('save', function (next) {
-    this.id = utils.guid();
-    next();
-});
+TournamentSchema
+    .path('uniqueId')
+    .validate(function (uniqueId) {
+        return this.uniqueId != uniqueId;
+    })
+
+    .pre('save', function (next) {
+        if (this.isNew) {
+            this.uniqueId = utils.guid();
+        }
+        next();
+    })
+;
 
 mongoose.model('Tournament', TournamentSchema);

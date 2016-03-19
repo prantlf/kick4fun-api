@@ -16,25 +16,32 @@ const PlayerSchema = new mongoose.Schema({
     organization: {
         type: String,
         required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
 
 PlayerSchema
 
     .path('name')
-    .validate(function (name, fn) {
+    .validate(function (name, respond) {
         const player = mongoose.model('Player');
-        // Check only when it is a new player or when name is modified
         if (this.isNew || this.isModified('name')) {
             player.find({name: name}).exec(function (err, players) {
-                fn(!err && players.length === 0);
+                respond(!err && players.length === 0);
             });
-        } else fn(true);
+        } else {
+            respond(true);
+        }
     }, 'Name already exists')
 
     .pre('save', function (next) {
-        this.fullName = this.fullName || this.name;
-        this.nickName = this.nickName || this.name;
+        if (this.isNew) {
+            this.fullName = this.fullName || this.name;
+            this.nickName = this.nickName || this.name;
+        }
         next();
     })
 

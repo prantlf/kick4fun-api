@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-const StandingChallengeSchema = new mongoose.Schema({
+const ChallengeStandingSchema = new mongoose.Schema({
     tournament: {
         type: String,
         required: true
@@ -33,5 +33,5 @@ const StandingChallengeSchema = new mongoose.Schema({
     }]
 });
 
-mongoose.model('StandingChallenge', StandingChallengeSchema);
+mongoose.model('ChallengeStanding', ChallengeStandingSchema);
 

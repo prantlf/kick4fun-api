@@ -5,8 +5,13 @@ const MatchSchema = new mongoose.Schema({
         type: Number,
         min: 1
     },
+    tournament: {
+        type: String,
+        required: true
+    },
     date: {
-        type: Date
+        type: Date,
+        default : Date.now
     },
     team1: [{
         type: String,
@@ -27,17 +32,17 @@ const MatchSchema = new mongoose.Schema({
 
 MatchSchema
     .path('result')
-    .validate(function (result) {
+    .validate(function (result, respond) {
         if (result.length % 2 !== 0) {
-            return false;
+            respond(false);
         }
         var i;
         for (i = 0; i < result.length; i += 2) {
             if (result[i] === result[i + 1]) {
-                return false;
+                respond(false);
             }
         }
-        return true;
+        respond(true);
     }, 'Result is inconsistent')
 
     .virtual('sets')

@@ -1,61 +1,61 @@
 [
   {
-    "id": "anja",
+    "uniqueId": "anja",
     "fullname": "Anja Klement",
     "nickname": "Anja"
   },
   {
-    "id": "claus",
+    "uniqueId": "claus",
     "fullname": "Claus Ilmberger",
     "nickname": "Clausi"
   },
   {
-    "id": "ferda",
+    "uniqueId": "ferda",
     "fullname": "Ferdinand Prantl",
     "nickname": "Ferda"
   },
   {
-    "id": "josef",
+    "uniqueId": "josef",
     "fullname": "Josef König",
     "nickname": "Josef"
   },
   {
-    "id": "katja",
+    "uniqueId": "katja",
     "fullname": "Katja Tribulowski",
     "nickname": "Katja"
   },
   {
-    "id": "lio",
+    "uniqueId": "lio",
     "fullname": "Lionel Spohr",
     "nickname": "Messi"
   },
   {
-    "id": "manfred",
+    "uniqueId": "manfred",
     "fullname": "Manfred Rottner",
     "nickname": "Manfred"
   },
   {
-    "id": "peter",
+    "uniqueId": "peter",
     "fullname": "Peter Sturm",
     "nickname": "Anja"
   },
   {
-    "id": "reinhard",
+    "uniqueId": "reinhard",
     "fullname": "Reinhard Loch",
     "nickname": "Reininho"
   },
   {
-    "id": "stefano",
+    "uniqueId": "stefano",
     "fullname": "Stefano Laurichella",
     "nickname": "Stefano"
   },
   {
-    "id": "szabi",
+    "uniqueId": "szabi",
     "fullname": "Szabolcs Gyula Smile",
     "nickname": "Szabi"
   },
   {
-    "id": "uschi",
+    "uniqueId": "uschi",
     "fullname": "Ursula Schreyer",
     "nickname": "Uschi"
   }

@@ -18,7 +18,7 @@
   ],
   "matches": [
     {
-      "id": 0,
+      "uniqueId": 0,
       "date": "2016-05-15",
       "teams": [
         [
@@ -52,7 +52,7 @@
   ],
   "results": [
     {
-      "id": 0,
+      "uniqueId": 0,
       "standings": [
         {
           "player": "stefano",
