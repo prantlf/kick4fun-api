@@ -1,15 +1,33 @@
 var mongoose = require('mongoose');
 
 const MatchSchema = new mongoose.Schema({
-    id: {type: Number, min: 1},
-    date: {type: Date},
-    team1: [{type: String, check: {minLength: 1, maxLength: 2}}],
-    team2: [{type: String, check: {minLength: 1, maxLength: 2}}],
+    id: {
+        type: Number,
+        min: 1
+    },
+    date: {
+        type: Date
+    },
+    team1: [{
+        type: String,
+        check: {
+            minLength: 1,
+            maxLength: 2
+        }
+    }],
+    team2: [{
+        type: String,
+        check: {
+            minLength: 1,
+            maxLength: 2
+        }
+    }],
     result: [Number]
 });
 
 MatchSchema
-    .path('result').validate(function (result) {
+    .path('result')
+    .validate(function (result) {
         if (result.length % 2 !== 0) {
             return false;
         }
@@ -22,7 +40,8 @@ MatchSchema
         return true;
     }, 'Result is inconsistent')
 
-    .virtual('sets').get(function () {
+    .virtual('sets')
+    .get(function () {
         var s1 = 0, s2 = 0, i;
         for (i = 0; i < this.result.length; i += 2) {
             if (this.result[i] > this.result[i + 1]) {
@@ -34,7 +53,8 @@ MatchSchema
         return [s1, s2];
     })
 
-    .virtual('goals').get(function () {
+    .virtual('goals')
+    .get(function () {
         var g1 = 0, g2 = 0, i;
         for (i = 0; i < this.result.length; i += 2) {
             g1 += result[i];

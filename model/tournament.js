@@ -13,8 +13,11 @@ const TournamentSchema = new mongoose.Schema({
 TournamentSchema
     .path('description').required(true, 'Description must be set.')
 
+    .path('organization').required(true, 'Organization must be set.')
+
     .pre('save', function (next) {
         this.id = utils.guid();
+        next();
     })
 ;
 
