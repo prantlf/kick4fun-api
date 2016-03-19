@@ -22,7 +22,6 @@ const PlayerSchema = new mongoose.Schema({
 });
 
 PlayerSchema
-
     .path('name')
     .validate(function (name, respond) {
         const player = mongoose.model('Player');
@@ -33,16 +32,15 @@ PlayerSchema
         } else {
             respond(true);
         }
-    }, 'Name already exists')
+    }, 'Name already exists');
 
+PlayerSchema
     .pre('save', function (next) {
         if (this.isNew) {
             this.fullName = this.fullName || this.name;
             this.nickName = this.nickName || this.name;
         }
         next();
-    })
-
-;
+    });
 
 mongoose.model('Player', PlayerSchema);

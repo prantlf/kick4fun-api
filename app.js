@@ -11,6 +11,9 @@ var tournaments = require('./routes/tournaments');
 var participants = require('./routes/participants');
 var matches = require('./routes/matches');
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017');
+
 var app = express();
 
 // view engine setup
