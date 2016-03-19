@@ -1,7 +1,7 @@
 var express = require('express');
 //var fileUtils = require('../utils/fileUtils');
 var mongoose = require('mongoose');
-var player = require('../model/player');
+require('../model/player');
 const Player = mongoose.model('Player');
 
 var router = express.Router();
@@ -25,16 +25,20 @@ router.post('/', function (reg, res, next) {
         name: player.name,
         fullName: player.fullName || '',
         nickName: player.nickName || '',
-        organisation: player.organisation
+        organization: player.organization
     });
     newPlayer.save(function (err, player) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send('ok');
+        }
     });
-    res.send('ok');
 });
 
 router.put('/', function (reg, res, next) {
     var player = reg.body;
-    Player.findOneAndUpdate({'name': req.name}, req.newData, {upsert:true}, function(){
+    Player.findOneAndUpdate({'name': req.name}, req.newData, {upsert: true}, function () {
 
     });
 });

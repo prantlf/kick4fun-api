@@ -23,14 +23,14 @@ const PlayerSchema = new mongoose.Schema({
 
 PlayerSchema
     .path('name')
-    .validate(function (name, respond) {
+    .validate(function (name) {
         const player = mongoose.model('Player');
         if (this.isNew || this.isModified('name')) {
             player.find({name: name}).exec(function (err, players) {
-                respond(!err && players.length === 0);
+                return !err && players.length == 0;
             });
         } else {
-            respond(true);
+            return true;
         }
     }, 'Name already exists');
 
