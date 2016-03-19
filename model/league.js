@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-const ChallengeStandingSchema = new mongoose.Schema({
+const LeagueSchema = new mongoose.Schema({
     tournament: {
         type: String,
         required: true
@@ -18,20 +18,35 @@ const ChallengeStandingSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
-        fineScore: {
+        wins: {
             type: Number,
             required: true
         },
-        rank: {
+        draws: {
             type: Number,
             required: true
         },
-        grade: {
+        losses: {
+            type: Number,
+            required: true
+        },
+        goalsScored: {
+            type: Number,
+            required: true
+        },
+        goalsShipped: {
             type: Number,
             required: true
         }
     }]
 });
 
-mongoose.model('ChallengeStanding', ChallengeStandingSchema);
+LeagueSchema
+    .virtual('goalsDiff')
+    .get(function () {
+        return this.goalsScored - this.goalsShipped;
+    })
+;
+
+mongoose.model('League', LeagueSchema);
 

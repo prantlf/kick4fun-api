@@ -7,10 +7,6 @@ const TournamentSchema = new mongoose.Schema({
         default: 'league',
         enum: ['league', 'challenge']
     },
-    uniqueId: {
-        type: String,
-        default: ''
-    },
     description: {
         type: String,
         required: true
@@ -19,10 +15,6 @@ const TournamentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
     status: {
         type: String,
         default: 'planned',
@@ -30,10 +22,12 @@ const TournamentSchema = new mongoose.Schema({
             'planned',      // not yet set up completely
             'progress',     // with partial results
             'completed',    // with complete results
-            'archived'      // intermediate standings removed
+            'archived'      // ?? intermediate standings removed
         ]
     },
     participants: [String]
+}, {
+    timestamps: true
 });
 
 TournamentSchema

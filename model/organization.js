@@ -2,17 +2,9 @@ var mongoose = require('mongoose');
 var utils = require('../utils/utils');
 
 const OrganizationSchema = new mongoose.Schema({
-    uniqueId: {
-        type: String,
-        default: ''
-    },
     description: {
         type: String,
         required: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
     },
     adminUser: {
         type: String,
@@ -22,6 +14,8 @@ const OrganizationSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+}, {
+    timestamps: true
 });
 
 OrganizationSchema
