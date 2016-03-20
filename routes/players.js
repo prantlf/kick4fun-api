@@ -1,13 +1,12 @@
 var express = require('express');
-//var fileUtils = require('../utils/fileUtils');
 var mongoose = require('mongoose');
-require('../model/player');
+var utils = require('../utils/utils');
+
 const Player = mongoose.model('Player');
 
 var router = express.Router();
 
 router.get('/', function (req, res, next) {
-    //res.send(fileUtils.getJsonFromFile('players.json'));
     Player.find(function (err, players) {
         if (!err) {
             res.send(players);
@@ -20,7 +19,6 @@ router.get('/', function (req, res, next) {
 router.post('/', function (reg, res, next) {
     var player = reg.body;
     //var ok = verifyMatch(match);
-    //res.send(match);
     var newPlayer = new Player({
         name: player.name,
         fullName: player.fullName || '',
@@ -34,6 +32,13 @@ router.post('/', function (reg, res, next) {
             res.send('ok');
         }
     });
+});
+
+router.delete('/*/', function(reg, res, next) {
+    var playerName = utils.getFragment(reg.originalUrl, '/', -1);
+    Player.findOneAndRemove({'name': playerName}, function(respond) {
+        respond(true);
+    })
 });
 
 router.put('/', function (reg, res, next) {

@@ -30,18 +30,11 @@ const TournamentSchema = new mongoose.Schema({
     timestamps: true
 });
 
-TournamentSchema
-    .path('uniqueId')
-    .validate(function (uniqueId) {
-        return this.uniqueId != uniqueId;
-    })
-
-    .pre('save', function (next) {
-        if (this.isNew) {
-            this.uniqueId = utils.guid();
-        }
-        next();
-    })
-;
+TournamentSchema.pre('save', function (next) {
+    if (this.isNew) {
+        this.uniqueId = utils.guid();
+    }
+    next();
+});
 
 mongoose.model('Tournament', TournamentSchema);
