@@ -29,4 +29,4 @@ TournamentSchema = new mongoose.Schema({
     timestamps: true
 });
 
-mongoose.model('Tournament', TournamentSchema);
+Tournament = mongoose.model('Tournament', TournamentSchema);

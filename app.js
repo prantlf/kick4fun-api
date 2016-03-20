@@ -29,7 +29,7 @@ var players = require('./routes/players');
 var tournaments = require('./routes/tournaments');
 var participants = require('./routes/participants');
 var matches = require('./routes/matches');
-var matchDays = require('./routes/matchDays');
+//var matchDays = require('./routes/matchDays');
 
 app.use('/', routes);
 app.use('/', players);
@@ -39,7 +39,7 @@ app.use('', tournaments);
 app.use('/', participants);
 app.use('/', matches);
 //app.use('/api/tournaments/:tournamentId/matches', matches);
-app.use('/', matchDays);
+//app.use('/', matchDays);
 
 
 // connect to Mongo DB

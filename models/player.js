@@ -32,12 +32,4 @@ PlayerSchema.path('name').validate(function (name, respond) {
     }
 }, 'Name already exists');
 
-PlayerSchema.pre('save', function (next) {
-    if (this.isNew) {
-        this.fullName = this.fullName || this.name;
-        this.nickName = this.nickName || this.name;
-    }
-    next();
-});
-
 mongoose.model('Player', PlayerSchema);
