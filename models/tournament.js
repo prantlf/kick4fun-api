@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
-var utils = require('../utils/utils');
 
-const TournamentSchema = new mongoose.Schema({
+TournamentSchema = new mongoose.Schema({
     type: {
         type: String,
         default: 'league',
@@ -11,7 +10,7 @@ const TournamentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    organization: {
+    organizer: {
         type: String,
         required: true
     },
@@ -28,13 +27,6 @@ const TournamentSchema = new mongoose.Schema({
     participants: [String]
 }, {
     timestamps: true
-});
-
-TournamentSchema.pre('save', function (next) {
-    if (this.isNew) {
-        this.uniqueId = utils.guid();
-    }
-    next();
 });
 
 mongoose.model('Tournament', TournamentSchema);

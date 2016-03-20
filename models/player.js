@@ -13,7 +13,7 @@ const PlayerSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    organization: {
+    organizer: {
         type: String,
         required: true
     }

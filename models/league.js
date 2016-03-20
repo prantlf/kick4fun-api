@@ -1,14 +1,9 @@
 var mongoose = require('mongoose');
 
+require('./tournament.js');
+
 const LeagueSchema = new mongoose.Schema({
-    tournament: {
-        type: String,
-        required: true
-    },
-    id: {
-        type: Number,
-        required: true
-    },
+    tournament: TournamentSchema,
     standings: [{
         player: {
             type: String,
@@ -48,5 +43,5 @@ LeagueSchema
     })
 ;
 
-mongoose.model('League', LeagueSchema);
+mongoose.model('League', LeagueSchema, 'Tournament');
 

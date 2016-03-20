@@ -1,51 +1,57 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var utils = require('../utils/utils');
 
 const Player = mongoose.model('Player');
 
 var router = express.Router();
 
-router.get('/', function (req, res, next) {
-    Player.find(function (err, players) {
-        if (!err) {
-            res.send(players);
+router.get('/api/players', function (request, response, next) {
+    Player.find(function (error, players) {
+        if (error) {
+            next(new Error(error));
         } else {
-            next(new Error(err));
+            response.send(players);
         }
     });
 });
 
-router.post('/', function (reg, res, next) {
-    var player = reg.body;
-    //var ok = verifyMatch(match);
+router.post('/api/players', function (request, response, next) {
+    var player = request.body;
     var newPlayer = new Player({
         name: player.name,
         fullName: player.fullName || '',
         nickName: player.nickName || '',
-        organization: player.organization
+        organizer: player.organizer
     });
-    newPlayer.save(function (err, player) {
-        if (err) {
-            res.send(err);
+    newPlayer.save(function (error, player) {
+        if (error) {
+            next(new Error(error));
         } else {
-            res.send('ok');
+            response.send(player);
         }
     });
 });
 
-router.delete('/*/', function(reg, res, next) {
-    var playerName = utils.getFragment(reg.originalUrl, '/', -1);
-    Player.findOneAndRemove({'name': playerName}, function(respond) {
-        respond(true);
-    })
+router.put('/api/players/:playerName', function (request, response, next) {
+    var name = request.params.playerName;
+    Player.findOneAndUpdate({'name': name}, request.body, {upsert: true}, function (error) {
+        if (error) {
+            next(new Error(error));
+        } else {
+            response.send('ok');
+        }
+    });
 });
 
-router.put('/', function (reg, res, next) {
-    var player = reg.body;
-    Player.findOneAndUpdate({'name': req.name}, req.newData, {upsert: true}, function () {
-
-    });
+router.delete('/api/players/:playerName', function (request, response, next) {
+    var playerName = request.params.playerName;
+    Player.findOneAndRemove({'name': playerName}, function (error) {
+        if (error) {
+            next(new Error(error));
+        } else {
+            response.send('ok');
+        }
+    })
 });
 
 module.exports = router;

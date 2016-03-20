@@ -1,13 +1,17 @@
 var mongoose = require('mongoose');
 
 const MatchSchema = new mongoose.Schema({
-    id: {
-        type: Number,
-        min: 1
-    },
     tournament: {
         type: String,
         required: true
+    },
+    number: {
+        type: Number,
+        min: 1
+    },
+    matchday: {
+        type: Number,
+        default: 0
     },
     date: {
         type: Date,

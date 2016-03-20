@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
-var utils = require('../utils/utils');
+var utils = require('../utils');
 
-const OrganizationSchema = new mongoose.Schema({
+const OrganizerSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -22,15 +22,15 @@ const OrganizationSchema = new mongoose.Schema({
     timestamps: true
 });
 
-OrganizationSchema.path('name').validate(function (name, respond) {
-    const Organization = mongoose.model('Organization');
+OrganizerSchema.path('name').validate(function (name, respond) {
+    const Organizer = mongoose.model('Organizer');
     if (this.isNew || this.isModified('name')) {
-        Organization.find({name: name}).exec(function (err, organizations) {
-            respond(!err && organizations.length == 0);
+        Organizer.find({name: name}).exec(function (err, organizers) {
+            respond(!err && organizers.length == 0);
         });
     } else {
         respond(true);
     }
 }, 'Name already exists');
 
-mongoose.model('Organization', OrganizationSchema);
+mongoose.model('Organizer', OrganizerSchema);

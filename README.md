@@ -30,3 +30,4 @@ sc.exe create MongoDB binPath= "C:\Program Files\MongoDB\Server\3.2\bin\mongod.e
 
 Remove service:
 sc.exe delete MongoDB
+

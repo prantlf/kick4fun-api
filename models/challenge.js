@@ -1,13 +1,16 @@
 var mongoose = require('mongoose');
 
+require('./tournament.js');
+
 const ChallengeSchema = new mongoose.Schema({
-    tournament: {
+    tournament: TournamentSchema,
+    type: {
         type: String,
-        required: true
-    },
-    id: {
-        type: Number,
-        required: true
+        default: 'start',
+        enum: [
+            'start',    // standings at beginning of challenge
+            'current'   // current standings
+        ]
     },
     standings: [{
         player: {
@@ -29,5 +32,5 @@ const ChallengeSchema = new mongoose.Schema({
     }]
 });
 
-mongoose.model('Challenge', ChallengeSchema);
+mongoose.model('Challenge', ChallengeSchema, 'Tournament');
 
