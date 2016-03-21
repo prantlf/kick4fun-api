@@ -1,36 +1,36 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose')
+    , Schema = mongoose.Schema;
 
-const MatchSchema = new mongoose.Schema({
-    tournament: {
-        type: String,
-        required: true
-    },
+const TeamSchema = new Schema([{
+    type: String,
+    ref: 'Player',
+    check: {
+        minLength: 1,
+        maxLength: 2
+    }
+}]);
+
+const MatchSchema = new Schema({
     number: {
         type: Number,
         min: 1
     },
-    matchday: {
-        type: Number,
-        default: 0
+    _tournament: {
+        type: String,
+        ref: 'Tournament'
     },
     date: {
         type: Date,
         default: Date.now
     },
-    team1: [{
-        type: String,
-        check: {
-            minLength: 1,
-            maxLength: 2
-        }
-    }],
-    team2: [{
-        type: String,
-        check: {
-            minLength: 1,
-            maxLength: 2
-        }
-    }],
+    _team1: {
+        type: TeamSchema,
+        required: true
+    },
+    _team2: {
+        type: TeamSchema,
+        required: true
+    },
     result: [Number]
 });
 

@@ -1,18 +1,19 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose')
+    , Schema = mongoose.Schema;
 
-TournamentSchema = new mongoose.Schema({
-    type: {
+TournamentSchema = new Schema({
+    _id: {
         type: String,
-        default: 'league',
-        enum: ['league', 'challenge']
+        required: true,
+        unique: true
     },
     description: {
         type: String,
         required: true
     },
-    organizer: {
+    _organizer: {
         type: String,
-        required: true
+        ref: 'organizer'
     },
     status: {
         type: String,
@@ -21,12 +22,20 @@ TournamentSchema = new mongoose.Schema({
             'planned',      // not yet set up completely
             'progress',     // with partial results
             'completed',    // with complete results
-            'archived'      // ?? intermediate standings removed
+            'archived'      // intermediate standings removed?
         ]
     },
-    participants: [String]
+    participants: [{
+        type: String,
+        ref: 'Player'
+    }]
 }, {
-    timestamps: true
+    timestamps: true,
+    discriminatorKey: 'kind'
 });
 
-Tournament = mongoose.model('Tournament', TournamentSchema);
+TournamentSchema.path('_id').validate(function (_id, respond) {
+    respond(this.isNew || !this.isModified('_id'));
+}, '_id cannot be changed');
+
+exports.Tournament = mongoose.model('Tournament', TournamentSchema);

@@ -1,45 +1,50 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose')
+    , Schema = mongoose.Schema;
 
-require('./tournament.js');
+var TournamentExports = require('./tournament');
 
-const LeagueSchema = Tournament.discriminator('League',
-    new mongoose.Schema({
-        standings: [{
-            player: {
-                type: String,
-                required: true
-            },
-            score: {
-                type: Number,
-                required: true
-            },
-            wins: {
-                type: Number,
-                required: true
-            },
-            draws: {
-                type: Number,
-                required: true
-            },
-            losses: {
-                type: Number,
-                required: true
-            },
-            goalsScored: {
-                type: Number,
-                required: true
-            },
-            goalsShipped: {
-                type: Number,
-                required: true
-            }
-        }]
-    })
-);
-/*
-LeagueSchema.virtual('goalsDiff').get(function () {
-    return this.goalsScored - this.goalsShipped;
+const LeagueStandingSchema = new Schema({
+    player: {
+        type: String,
+        ref: 'Player'
+    },
+    score: {
+        type: Number,
+        required: true
+    },
+    wins: {
+        type: Number,
+        required: true
+    },
+    draws: {
+        type: Number,
+        required: true
+    },
+    losses: {
+        type: Number,
+        required: true
+    },
+    goalsScored: {
+        type: Number,
+        required: true
+    },
+    goalsShipped: {
+        type: Number,
+        required: true
+    }
 });
-*/
-//mongoose.model('League', LeagueSchema, 'Tournament');
 
+const leagueSchema = new Schema({
+    options: {},
+    _matches: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Match'
+    }],
+    standings: [
+        LeagueStandingSchema
+    ]
+}, {
+    discriminatorKey: 'kind'
+});
+
+TournamentExports.Tournament.discriminator('League', leagueSchema);

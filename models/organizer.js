@@ -1,7 +1,11 @@
-var mongoose = require('mongoose');
-var utils = require('../utils');
+var mongoose = require('mongoose')
+    , Schema = mongoose.Schema;
 
-const OrganizerSchema = new mongoose.Schema({
+const OrganizerSchema = new Schema({
+    _id: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
@@ -17,10 +21,18 @@ const OrganizerSchema = new mongoose.Schema({
     adminPassword: {
         type: String,
         required: true
-    }
+    },
+    _players: [{
+        type: String,
+        ref: 'Player'
+    }]
 }, {
     timestamps: true
 });
+
+OrganizerSchema.path('_id').validate(function (_id, respond) {
+    respond(this.isNew || !this.isModified('_id'));
+}, '_id cannot be changed');
 
 OrganizerSchema.path('name').validate(function (name, respond) {
     const Organizer = mongoose.model('Organizer');

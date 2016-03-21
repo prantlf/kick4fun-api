@@ -1,29 +1,61 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose')
+    , Schema = mongoose.Schema;
 
-require('./tournament.js');
+var TournamentExports = require('./tournament');
 
-const ChallengeSchema = Tournament.discriminator('Challenge',
-    new mongoose.Schema({
-        standings: [{
-            player: {
-                type: String,
-                required: true
-            },
-            score: {
-                type: Number,
-                required: true
-            },
-            fineScore: {
-                type: Number,
-                required: true
-            },
-            grade: {
-                type: Number,
-                required: true
-            }
-        }]
-    })
-);
+const ChallengeStandingSchema = new Schema({
+    player: {
+        type: String,
+        ref: 'Player'
+    },
+    score: {
+        type: Number,
+        required: true
+    },
+    fineScore: {
+        type: Number,
+        required: true
+    },
+    grade: {
+        type: Number,
+        required: true
+    },
+    numMatches: {
+        type: Number,
+        required: true
+    }
+});
 
-//mongoose.model('Challenge', ChallengeSchema, 'Tournament');
+var challengeSchema = new Schema({
+    options: {
+        matchPoints: {
+            type: Number,
+            required: true,
+            default: 1
+        },
+        winPoints: {
+            type: String,
+            enum: ['opponent', 'difference'],
+            default: 'opponent'
+        },
+        lossPoints: {
+            type: String,
+            enum: ['own', 'difference'],
+            default: 'own'
+        }
+    },
+    lineUp: [
+        ChallengeStandingSchema
+    ],
+    matches: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Match'
+    }],
+    standings: [
+        ChallengeStandingSchema
+    ]
+}, {
+    discriminatorKey: 'kind'
+});
 
+TournamentExports.Tournament.discriminator('Challenge', challengeSchema);

@@ -1,35 +1,34 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose')
+    , Schema = mongoose.Schema;
 
-const PlayerSchema = new mongoose.Schema({
-    name: {
+const PlayerSchema = new Schema({
+    _id: {
         type: String,
-        required: true
-    },
-    fullName: {
-        type: String,
-        default: ''
+        required: true,
+        unique: true
     },
     nickName: {
         type: String,
         default: ''
     },
-    organizer: {
+    fullName: {
         type: String,
-        required: true
-    }
+        default: ''
+    },
+    _organizer: {
+        type: String,
+        ref: 'Organizer'
+    },
+    _tournaments: [{
+        type: String,
+        ref: 'Tournament'
+    }]
 }, {
     timestamps: true
 });
 
-PlayerSchema.path('name').validate(function (name, respond) {
-    const Player = mongoose.model('Player');
-    if (this.isNew || this.isModified('name')) {
-        Player.find({name: name}).exec(function (err, players) {
-            respond(!err && players.length == 0);
-        });
-    } else {
-        respond(true);
-    }
-}, 'Name already exists');
+PlayerSchema.path('_id').validate(function (_id, respond) {
+    respond(this.isNew || !this.isModified('_id'));
+}, '_id cannot be changed');
 
 mongoose.model('Player', PlayerSchema);
