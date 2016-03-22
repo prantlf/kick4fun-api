@@ -17,10 +17,19 @@ var port = utils.normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 // load mongoose models
+/*
 var modelPath = join(__dirname, 'models');
 fs.readdirSync(modelPath).forEach(function (file) {
     require(join(modelPath, file));
 });
+*/
+require(join(__dirname, 'models/organizer'));
+require(join(__dirname, 'models/player'));
+require(join(__dirname, 'models/tournament'));
+require(join(__dirname, 'models/challenge'));
+require(join(__dirname, 'models/league'));
+require(join(__dirname, 'models/matchday'));
+require(join(__dirname, 'models/match'));
 
 // express routes
 var routes = require('./routes/index');

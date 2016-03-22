@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 
-var TournamentExports = require('./tournament');
+const Tournament = mongoose.model('Tournament');
 
 const LeagueStandingSchema = new Schema({
     player: {
@@ -47,4 +47,4 @@ const leagueSchema = new Schema({
     discriminatorKey: 'kind'
 });
 
-TournamentExports.Tournament.discriminator('League', leagueSchema);
+Tournament.discriminator('League', leagueSchema);

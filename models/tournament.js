@@ -4,8 +4,8 @@ var mongoose = require('mongoose')
 TournamentSchema = new Schema({
     _id: {
         type: String,
-        required: true,
-        unique: true
+        required: true//,
+        //unique: true
     },
     description: {
         type: String,
@@ -13,7 +13,7 @@ TournamentSchema = new Schema({
     },
     _organizer: {
         type: String,
-        ref: 'organizer'
+        ref: 'Organizer'
     },
     status: {
         type: String,
@@ -38,4 +38,4 @@ TournamentSchema.path('_id').validate(function (_id, respond) {
     respond(this.isNew || !this.isModified('_id'));
 }, '_id cannot be changed');
 
-exports.Tournament = mongoose.model('Tournament', TournamentSchema);
+mongoose.model('Tournament', TournamentSchema);
