@@ -15,12 +15,12 @@ const OrganizerSchema = new Schema({
         default: ''
     },
     adminUser: {
-        type: String,
-        required: true
+        type: String
+        //required: true
     },
     adminPassword: {
-        type: String,
-        required: true
+        type: String
+        //required: true
     },
     _players: [{
         type: String,
@@ -29,6 +29,15 @@ const OrganizerSchema = new Schema({
 }, {
     timestamps: true
 });
+
+OrganizerSchema.path('_id').validate(function (_id, respond) {
+    const Organizer = mongoose.model('Organizer');
+    if (this.isNew) {
+        Organizer.find({_id: _id}).exec(function (error, organizers) {
+            respond(!error && organizers.length == 0);
+        });
+    }
+}, '_id must be unique');
 
 OrganizerSchema.path('_id').validate(function (_id, respond) {
     respond(this.isNew || !this.isModified('_id'));

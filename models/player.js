@@ -4,8 +4,7 @@ var mongoose = require('mongoose')
 const PlayerSchema = new Schema({
     _id: {
         type: String,
-        required: true//,
-        //unique: true
+        required: true
     },
     nickName: {
         type: String,

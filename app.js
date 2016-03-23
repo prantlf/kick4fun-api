@@ -16,6 +16,14 @@ var app = express();
 var port = utils.normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
+// app dependencies
+app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
 // load mongoose models
 /*
 var modelPath = join(__dirname, 'models');
@@ -33,7 +41,7 @@ require(join(__dirname, 'models/match'));
 
 // express routes
 var routes = require('./routes/index');
-var organizers = require('./routes/organizer');
+var organizers = require('./routes/organizers');
 var players = require('./routes/players');
 var tournaments = require('./routes/tournaments');
 var participants = require('./routes/participants');
@@ -41,13 +49,11 @@ var matches = require('./routes/matches');
 //var matchDays = require('./routes/matchDays');
 
 app.use('/', routes);
-app.use('/', players);
 app.use('/', organizers);
-app.use('', tournaments);
-//app.use('/api/tournaments', tournaments);
+app.use('/', players);
+app.use('/', tournaments);
 app.use('/', participants);
 app.use('/', matches);
-//app.use('/api/tournaments/:tournamentId/matches', matches);
 //app.use('/', matchDays);
 
 
@@ -69,14 +75,6 @@ server.on('listening', onListening);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-
-// app dependencies
-app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
