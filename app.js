@@ -31,6 +31,7 @@ fs.readdirSync(modelPath).forEach(function (file) {
     require(join(modelPath, file));
 });
 */
+// load order is important due to inherited models
 require(join(__dirname, 'models/organizer'));
 require(join(__dirname, 'models/player'));
 require(join(__dirname, 'models/tournament'));

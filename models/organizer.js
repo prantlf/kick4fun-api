@@ -21,11 +21,7 @@ const OrganizerSchema = new Schema({
     adminPassword: {
         type: String
         //required: true
-    },
-    _players: [{
-        type: String,
-        ref: 'Player'
-    }]
+    }
 }, {
     timestamps: true
 });
@@ -35,7 +31,9 @@ OrganizerSchema.path('_id').validate(function (_id, respond) {
     if (this.isNew) {
         Organizer.find({_id: _id}).exec(function (error, organizers) {
             respond(!error && organizers.length == 0);
-        });
+        })
+    } else {
+        respond(true);
     }
 }, '_id must be unique');
 

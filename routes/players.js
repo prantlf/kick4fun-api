@@ -21,12 +21,14 @@ router.post('/api/players', function (request, response, next) {
     Organizer.findOne({_id: player.organizer}, function (error, organizer) {
         if (error) {
             next(error);
+        } else if (organizer == null) {
+            next(new Error("Organizer does not exist"));
         } else {
             var newPlayer = new Player({
-                _id: player.name,
+                name: player.name,
                 fullName: player.fullName || '',
                 nickName: player.nickName || '',
-                _organizer: organizer
+                _organizer: organizer._id
             });
             newPlayer.save(function (error, player) {
                 if (error) {
@@ -41,11 +43,12 @@ router.post('/api/players', function (request, response, next) {
 
 router.put('/api/players/:id', function (request, response, next) {
     var id = request.params.id;
-    Player.findOneAndUpdate({'_id': id}, request.body, {upsert: true}, function (error) {
+    var player = request.body;
+    Player.findOneAndUpdate({'name': id}, player, {upsert: true}, function (error) {
         if (error) {
             next(new Error(error));
         } else {
-            response.send('ok');
+            response.send(player);
         }
     });
 });

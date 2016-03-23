@@ -35,11 +35,12 @@ router.post('/api/organizers', function (request, response, next) {
 
 router.put('/api/organizers/:id', function (request, response, next) {
     var id = request.params.id;
-    Organizer.findOneAndUpdate({'_id': id}, request.body, {upsert: true}, function (error) {
+    var organizer = request.body;
+    Organizer.findOneAndUpdate({'_id': id}, organizer, {upsert: true}, function (error) {
         if (error) {
             next(new Error(error));
         } else {
-            response.send('ok');
+            response.send(organizer);
         }
     });
 });
