@@ -2,10 +2,9 @@ var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 
 TournamentSchema = new Schema({
-    _id: {
+    name: {
         type: String,
-        required: true//,
-        //unique: true
+        required: true
     },
     description: {
         type: String,
@@ -34,8 +33,20 @@ TournamentSchema = new Schema({
     discriminatorKey: 'kind'
 });
 
-TournamentSchema.path('_id').validate(function (_id, respond) {
-    respond(this.isNew || !this.isModified('_id'));
-}, '_id cannot be changed');
+TournamentSchema.path('name').validate(function (name, respond) {
+    const Tournament = mongoose.model('Tournament');
+    Tournament.find({_organizer: this._organizer}).exec(function (error, tournament) {
+        if (error) {
+            respond(false);
+        } else {
+            for (var i = 0; i < tournaments.length; i++) {
+                if (tournaments[i].name === name) {
+                    respond(false);
+                }
+            }
+            respond(true);
+        }
+    })
+}, "name must be unique within the organization");
 
 mongoose.model('Tournament', TournamentSchema);

@@ -2,6 +2,10 @@ var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 
 const PlayerSchema = new Schema({
+    _id: { // automatically created
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true

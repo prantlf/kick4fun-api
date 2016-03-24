@@ -18,8 +18,8 @@ router.get('/api/organizers', function (request, response, next) {
 router.post('/api/organizers', function (request, response, next) {
     var organizer = request.body;
     var newOrganizer = new Organizer({
-        _id: organizer.id,
-        name: organizer.name,
+        _id: organizer.name,
+        longName: organizer.longName,
         description: organizer.description || '',
         adminUser: organizer.adminUser || '',
         adminPassword: organizer.adminPassword || ''
