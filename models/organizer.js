@@ -31,6 +31,16 @@ OrganizerSchema.pre('findOneAndUpdate', function(next) {
     next();
 });
 */
+/*
+var runValidatorsPlugin = function (schema, options) {
+    OrganizerSchema.pre('findOneAndUpdate', function (next) {
+        this.options.runValidators = true;
+        next();
+    });
+};
+OrganizerSchema.plugin(runValidatorsPlugin);
+*/
+
 OrganizerSchema.path('_id').validate(function (_id, respond) {
     respond(!this.isNew || /^[a-zA-Z0-9]+$/.test(_id));
 }, '_id must consist of alpha-numerical characters');
