@@ -17,20 +17,21 @@ router.get('/api/players', function (request, response, next) {
 });
 
 router.post('/api/players', function (request, response, next) {
-    var player = request.body;
-    Organizer.findOne({_id: player.organizer}, function (error, organizer) {
+    var data = request.body;
+    Organizer.findOne({_id: data.organizer}, function (error, organizer) {
         if (error) {
             next(error);
         } else if (organizer == null) {
             next(new Error("Organizer does not exist"));
         } else {
-            var newPlayer = new Player({
-                name: player.name,
-                fullName: player.fullName || '',
-                nickName: player.nickName || '',
-                _organizer: organizer._id
+            var player = new Player({
+                _id: data.organizer + '_' + data.name,
+                name: data.name,
+                fullName: data.fullName || '',
+                nickName: data.nickName || '',
+                _organizer: data.organizer
             });
-            newPlayer.save(function (error, player) {
+            player.save(function (error, player) {
                 if (error) {
                     next(new Error(error));
                 } else {
@@ -43,19 +44,54 @@ router.post('/api/players', function (request, response, next) {
 
 router.put('/api/players/:id', function (request, response, next) {
     var id = request.params.id;
-    var player = request.body;
-    Player.findOneAndUpdate({'name': id}, player, {upsert: true}, function (error) {
-        if (error) {
-            next(new Error(error));
-        } else {
-            response.send(player);
-        }
+    var data = request.body;
+    Player.findById(id, function (error, player) {
+        player.name = data.name || player.name;
+        player.nickName = data.nickName || player.nickName;
+        player.fullName = data.fullName || player.fullName;
+        player.save(function (error, player) {
+            if (error) {
+                next(new Error(error));
+            } else {
+                response.send(player);
+            }
+        });
     });
 });
 
 router.delete('/api/players/:id', function (request, response, next) {
     var id = request.params.id;
     Player.findOneAndRemove({'_id': id}, function (error) {
+        if (error) {
+            next(new Error(error));
+        } else {
+            response.send('ok');
+        }
+    })
+});
+
+router.put('/api/organizers/:oid/players/:pname', function (request, response, next) {
+    var organizerId = request.params.oid;
+    var playerName = request.params.pname;
+    var data = request.body;
+    Player.findOne({'_organizer': organizerId, 'name': playerName}, function (error, player) {
+        player.name = data.name || player.name;
+        player.nickName = data.nickName || player.nickName;
+        player.fullName = data.fullName || player.fullName;
+        player.save(function (error, player) {
+            if (error) {
+                next(new Error(error));
+            } else {
+                response.send(player);
+            }
+        });
+    });
+});
+
+router.delete('/api/organizers/:oid/players/:pname', function (request, response, next) {
+    var organizerId = request.params.oid;
+    var playerName = request.params.pname;
+    Player.findOneAndRemove({'_organizer': organizerId, 'name': playerName}, function (error) {
         if (error) {
             next(new Error(error));
         } else {

@@ -15,31 +15,16 @@ const OrganizerSchema = new Schema({
         default: ''
     },
     adminUser: {
-        type: String
-        //required: true
+        type: String,
+        default: ''
     },
     adminPassword: {
-        type: String
-        //required: true
+        type: String,
+        default: ''
     }
 }, {
     timestamps: true
 });
-/*
-OrganizerSchema.pre('findOneAndUpdate', function(next) {
-    this.options.runValidators = true;
-    next();
-});
-*/
-/*
-var runValidatorsPlugin = function (schema, options) {
-    OrganizerSchema.pre('findOneAndUpdate', function (next) {
-        this.options.runValidators = true;
-        next();
-    });
-};
-OrganizerSchema.plugin(runValidatorsPlugin);
-*/
 
 OrganizerSchema.path('_id').validate(function (_id, respond) {
     respond(!this.isNew || /^[a-zA-Z0-9]+$/.test(_id));

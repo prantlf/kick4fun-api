@@ -26,24 +26,55 @@ const PlayerSchema = new Schema({
     timestamps: true
 });
 
+PlayerSchema.path('_id').validate(function (_id, respond) {
+    respond(!this.isNew || /^[a-zA-Z0-9_]+$/.test(_id));
+}, '_id must consist of alpha-numerical characters ans underscore');
+
+PlayerSchema.path('_id').validate(function (_id, respond) {
+    respond(this.isNew || !this.isModified('_id'));
+}, '_id cannot be changed');
+
+PlayerSchema.path('_id').validate(function (_id, respond) {
+    const Organizer = mongoose.model('Organizer');
+    if (this.isNew) {
+        Organizer.find({_id: _id}).exec(function (error, organizers) {
+            respond(!error && organizers.length == 0);
+        })
+    } else {
+        respond(true);
+    }
+}, '_id must be unique');
+
+PlayerSchema.path('_organizer').validate(function (_organizer, respond) {
+    respond(this.isNew || !this.isModified('_organizer'));
+}, '_organizer cannot be changed');
+
+PlayerSchema.path('name').validate(function (name, respond) {
+    respond(!this.isNew || /^[a-zA-Z]+$/.test(name));
+}, 'name must consist of alphabetical characters');
+
 PlayerSchema.path('name').validate(function (name, respond) {
     respond(this.isNew || !this.isModified('name'));
 }, 'name cannot be changed');
 
 PlayerSchema.path('name').validate(function (name, respond) {
-    const Player = mongoose.model('Player');
-    Player.find({_organizer: this._organizer}).exec(function (error, players) {
-        if (error) {
-            respond(false);
-        } else {
-            for (var i = 0; i < players.length; i++) {
-                if (players[i].name === name) {
-                    respond(false);
+    if (!this.isNew) {
+        respond(true)
+    } else {
+        const Player = mongoose.model('Player');
+        Player.find({_organizer: this._organizer}).exec(function (error, players) {
+            if (error) {
+                respond(false);
+            } else {
+                for (var i = 0; i < players.length; i++) {
+                    if (players[i].name === name) {
+                        respond(false);
+                    }
                 }
+                respond(true);
             }
-            respond(true);
-        }
-    })
-}, "name must be unique within the organization");
+        })
+    }
+}, "name already exists for given organizer");
 
 mongoose.model('Player', PlayerSchema);
