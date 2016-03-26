@@ -26,6 +26,10 @@ const OrganizerSchema = new Schema({
     timestamps: true
 });
 
+/*
+ * _id validation 
+ */
+
 OrganizerSchema.path('_id').validate(function (_id, respond) {
     respond(!this.isNew || /^[a-zA-Z0-9]+$/.test(_id));
 }, '_id must consist of alpha-numerical characters');
@@ -44,6 +48,10 @@ OrganizerSchema.path('_id').validate(function (_id, respond) {
         respond(true);
     }
 }, '_id must be unique');
+
+/*
+ * longName validation
+ */
 
 OrganizerSchema.path('longName').validate(function (longName, respond) {
     const Organizer = mongoose.model('Organizer');

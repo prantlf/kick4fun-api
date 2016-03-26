@@ -2,10 +2,10 @@ var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 
 TournamentSchema = new Schema({
-    _id: { // automatically created
+    /*_id: { // automatically created
         type: String,
         required: true
-    },
+    },*/
     name: {
         type: String,
         required: true
@@ -21,14 +21,6 @@ TournamentSchema = new Schema({
     _organizer: {
         type: String,
         ref: 'Organizer'
-    },
-    type: {
-        type: String,
-        default: 'liga',
-        enum: [
-            'liga',
-            'challenge'
-        ]
     },
     status: {
         type: String,
@@ -49,6 +41,10 @@ TournamentSchema = new Schema({
     discriminatorKey: 'kind'
 });
 
+/*
+ * _id validation
+ */
+
 TournamentSchema.path('_id').validate(function (_id, respond) {
     respond(!this.isNew || /^[a-zA-Z0-9_]+$/.test(_id));
 }, '_id must consist of alpha-numerical characters ans underscore');
@@ -68,9 +64,17 @@ TournamentSchema.path('_id').validate(function (_id, respond) {
     }
 }, '_id must be unique');
 
+/*
+ * _organizer validation
+ */
+
 TournamentSchema.path('_organizer').validate(function (_organizer, respond) {
     respond(this.isNew || !this.isModified('_organizer'));
 }, '_organizer cannot be changed');
+
+/*
+ * name validation
+ */
 
 TournamentSchema.path('name').validate(function (name, respond) {
     respond(!this.isNew || /^[a-zA-Z0-9]+$/.test(name));
@@ -81,24 +85,30 @@ TournamentSchema.path('name').validate(function (name, respond) {
 }, 'name cannot be changed');
 
 TournamentSchema.path('name').validate(function (name, respond) {
-    if (!this.isNew) {
-        respond(true);
-    } else {
-        const Tournament = mongoose.model('Tournament');
-        Tournament.find({_organizer: this._organizer}).exec(function (error, tournaments) {
-            if (error) {
-                respond(false);
-            } else {
-                for (var i = 0; i < tournaments.length; i++) {
-                    if (tournaments[i].name === name) {
+    const Tournament = mongoose.model('Tournament');
+    Tournament.find({_organizer: this._organizer}).exec(function (error, tournaments) {
+        if (error) {
+            respond(false);
+        } else {
+            var first = true;
+            for (var i = 0; i < tournaments.length; i++) {
+                if (tournaments[i].name === name) {
+                    if (!this.isNew && first) {
+                        first = false;
+                    } else {
                         respond(false);
                     }
                 }
-                respond(true);
             }
-        })
-    }
+            respond(true);
+        }
+    })
+
 }, "name already exists for given organizer");
+
+/*
+ * longName validation
+ */
 
 TournamentSchema.path('longName').validate(function (longName, respond) {
     const Tournament = mongoose.model('Tournament');
@@ -108,8 +118,8 @@ TournamentSchema.path('longName').validate(function (longName, respond) {
         } else {
             var first = true;
             for (var i = 0; i < tournaments.length; i++) {
-                if (tournaments[i].name === name) {
-                    if (first) {
+                if (tournaments[i].longName === longName) {
+                    if (!this.isNew && first) {
                         first = false;
                     } else {
                         respond(false);
@@ -120,9 +130,5 @@ TournamentSchema.path('longName').validate(function (longName, respond) {
         }
     })
 }, "name already exists for given organizer");
-
-TournamentSchema.path('type').validate(function (type, respond) {
-    respond(this.isNew || !this.isModified('type'));
-}, 'type cannot be changed');
 
 mongoose.model('Tournament', TournamentSchema);

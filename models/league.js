@@ -35,6 +35,10 @@ const LeagueStandingSchema = new Schema({
 });
 
 const leagueSchema = new Schema({
+    _id: { // automatically created
+        type: String,
+        required: true
+    },
     options: {},
     _matches: [{
         type: Schema.Types.ObjectId,

@@ -26,6 +26,10 @@ const PlayerSchema = new Schema({
     timestamps: true
 });
 
+/*
+ * _id validation
+ */
+
 PlayerSchema.path('_id').validate(function (_id, respond) {
     respond(!this.isNew || /^[a-zA-Z0-9_]+$/.test(_id));
 }, '_id must consist of alpha-numerical characters ans underscore');
@@ -45,9 +49,17 @@ PlayerSchema.path('_id').validate(function (_id, respond) {
     }
 }, '_id must be unique');
 
+/*
+ * _organizer validation
+ */
+
 PlayerSchema.path('_organizer').validate(function (_organizer, respond) {
     respond(this.isNew || !this.isModified('_organizer'));
 }, '_organizer cannot be changed');
+
+/*
+ * name validation
+ */
 
 PlayerSchema.path('name').validate(function (name, respond) {
     respond(!this.isNew || /^[a-zA-Z]+$/.test(name));
@@ -58,23 +70,24 @@ PlayerSchema.path('name').validate(function (name, respond) {
 }, 'name cannot be changed');
 
 PlayerSchema.path('name').validate(function (name, respond) {
-    if (!this.isNew) {
-        respond(true);
-    } else {
-        const Player = mongoose.model('Player');
-        Player.find({_organizer: this._organizer}).exec(function (error, players) {
-            if (error) {
-                respond(false);
-            } else {
-                for (var i = 0; i < players.length; i++) {
-                    if (players[i].name === name) {
+    const Player = mongoose.model('Player');
+    Player.find({_organizer: this._organizer}).exec(function (error, players) {
+        if (error) {
+            respond(false);
+        } else {
+            var first = true;
+            for (var i = 0; i < players.length; i++) {
+                if (players[i].name === name) {
+                    if (!this.isNew && first) {
+                        first = false;
+                    } else {
                         respond(false);
                     }
                 }
-                respond(true);
             }
-        })
-    }
+            respond(true);
+        }
+    })
 }, "name already exists for given organizer");
 
 mongoose.model('Player', PlayerSchema);

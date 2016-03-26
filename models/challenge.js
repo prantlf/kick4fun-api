@@ -27,6 +27,10 @@ const ChallengeStandingSchema = new Schema({
 });
 
 var challengeSchema = new Schema({
+    _id: { // automatically created
+        type: String,
+        required: true
+    },
     options: {
         matchPoints: {
             type: Number,
