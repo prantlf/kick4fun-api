@@ -70,9 +70,9 @@ router.delete('/api/players/:id', function (request, response, next) {
     })
 });
 
-router.put('/api/organizers/:oid/players/:pname', function (request, response, next) {
-    var organizerId = request.params.oid;
-    var playerName = request.params.pname;
+router.put('/api/organizers/:id/players/:name', function (request, response, next) {
+    var organizerId = request.params.id;
+    var playerName = request.params.name;
     var data = request.body;
     Player.findOne({'_organizer': organizerId, 'name': playerName}, function (error, player) {
         player.name = data.name || player.name;
@@ -88,9 +88,9 @@ router.put('/api/organizers/:oid/players/:pname', function (request, response, n
     });
 });
 
-router.delete('/api/organizers/:oid/players/:pname', function (request, response, next) {
-    var organizerId = request.params.oid;
-    var playerName = request.params.pname;
+router.delete('/api/organizers/:id/players/:name', function (request, response, next) {
+    var organizerId = request.params.id;
+    var playerName = request.params.name;
     Player.findOneAndRemove({'_organizer': organizerId, 'name': playerName}, function (error) {
         if (error) {
             next(new Error(error));

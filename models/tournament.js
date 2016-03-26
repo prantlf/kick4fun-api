@@ -2,11 +2,15 @@ var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 
 TournamentSchema = new Schema({
+    _id: { // automatically created
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
     },
-    description: {
+    longName: {
         type: String,
         required: true
     },

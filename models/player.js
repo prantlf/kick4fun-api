@@ -59,7 +59,7 @@ PlayerSchema.path('name').validate(function (name, respond) {
 
 PlayerSchema.path('name').validate(function (name, respond) {
     if (!this.isNew) {
-        respond(true)
+        respond(true);
     } else {
         const Player = mongoose.model('Player');
         Player.find({_organizer: this._organizer}).exec(function (error, players) {
