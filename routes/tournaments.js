@@ -32,15 +32,14 @@ router.post('/api/tournaments', function (request, response, next) {
                     name: data.name,
                     longName: data.longName,
                     description: data.description || '',
-                    _organizer: data.organizer,
-                    type: data.type
+                    _organizer: data.organizer
                 };
-                if (data.type == 'league') {
+                if (data.kind == 'League') {
                     tournament = new League(initData);
-                } else if (data.type == 'challenge') {
+                } else if (data.kind == 'Challenge') {
                     tournament = new Challenge(initData);
                 } else {
-                    next(new Error("Tournament type ' + data.type + ' does not exist"));
+                    next(new Error("Tournament kind ' + data.kind + ' does not exist"));
                 }
                 tournament.save(function (error, tournament) {
                     if (error) {
@@ -71,17 +70,6 @@ router.put('/api/tournaments/:id', function (request, response, next) {
     });
 });
 
-router.delete('/api/tournaments/:id', function (request, response, next) {
-    var tournamentId = request.params.id;
-    Tournament.findOneAndRemove({'_id': tournamentId}, function (error) {
-        if (error) {
-            next(new Error(error));
-        } else {
-            response.send('ok');
-        }
-    })
-});
-
 router.put('/api/organizers/:id/tournaments/:name', function (request, response, next) {
     var organizerId = request.params.id;
     var tournamentName = request.params.name;
@@ -100,6 +88,17 @@ router.put('/api/organizers/:id/tournaments/:name', function (request, response,
     });
 });
 
+router.delete('/api/tournaments/:id', function (request, response, next) {
+    var tournamentId = request.params.id;
+    Tournament.findOneAndRemove({'_id': tournamentId}, function (error) {
+        if (error) {
+            next(new Error(error));
+        } else {
+            response.send('ok');
+        }
+    })
+});
+
 router.delete('/api/organizers/:id/tournaments/:name', function (request, response, next) {
     var organizerId = request.params.id;
     var tournamentName = request.params.name;
@@ -111,5 +110,13 @@ router.delete('/api/organizers/:id/tournaments/:name', function (request, respon
         }
     })
 });
+
+//router.put('/api/tournaments/:id/prepare')
+
+//router.put('/api/organizers/:id/tournaments/:name/prepare')
+
+//router.put('/api/tournaments/:id/start')
+
+//router.put('/api/organizers/:id/tournaments/:name/start')
 
 module.exports = router;

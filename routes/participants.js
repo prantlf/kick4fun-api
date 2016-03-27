@@ -1,32 +1,31 @@
 var express = require('express');
-var utils = require('../utils');
+var mongoose = require('mongoose');
+
+const Tournament = mongoose.model('Tournament');
 
 var router = express.Router();
 
-router.get('/api/tournaments/:tournamentId/participants', function (request, response, next) {
-    /*
-    var tournamentId = utils.getFragment(reg.baseUrl, '/', -2);
-    var fileName = 'tournament-' + tournamentId + '.json';
-    if (!fileUtils.fileExists(fileName)) {
-        var error = new Error('Tournament with ID ' + tournamentId + ' does not exist.');
-        error.status = 404;
-        next(error);
-    } else {
-        var obj = fileUtils.getObjFromFile(fileName);
-        var participantIds = obj.participants;
-        */
-    var tid = request.params.tournamentId;
-        var participants = [];
-    /*
-        var players = fileUtils.getObjFromFile('players.json');
-        players.forEach(function (player) {
-            if (participantIds.indexOf(player.id) >= 0) {
-                participants.push(player);
-            }
-        });
-        */
-        response.send(participants);
-    //}
+router.get('/api/tournaments/:id/participants', function (request, response, next) {
+    var id = request.params.id;
+    Tournament.findById(id, function (error, tournament) {
+        if (error) {
+            next(error);
+        } else if (tournament == null) {
+            next(new Error('Tournament does not exist'));
+        } else {
+            response.send(tournament.participants);
+        }
+    });
 });
+
+//router.get('api/organizers/:id/tournaments/:name/participants')
+
+//router.put('/api/tournaments/:id/participants')
+
+//router.put('api/organizers/:id/tournaments/:name/participants')
+
+//router.delete('api/tournaments/:id/participants/:name')
+
+//router.delete('api/organizers/:id/tournaments/:tname/participants/:pname')
 
 module.exports = router;

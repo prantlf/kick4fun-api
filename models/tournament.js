@@ -27,6 +27,7 @@ TournamentSchema = new Schema({
         default: 'planned',
         enum: [
             'planned',      // not yet set up completely
+            'prepared',     // set up completely
             'progress',     // with partial results
             'completed',    // with complete results
             'archived'      // intermediate standings removed?
@@ -47,7 +48,7 @@ TournamentSchema = new Schema({
 
 TournamentSchema.path('_id').validate(function (_id, respond) {
     respond(!this.isNew || /^[a-zA-Z0-9_]+$/.test(_id));
-}, '_id must consist of alpha-numerical characters ans underscore');
+}, '_id must consist of alpha-numerical characters and _');
 
 TournamentSchema.path('_id').validate(function (_id, respond) {
     respond(this.isNew || !this.isModified('_id'));

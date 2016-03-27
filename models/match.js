@@ -15,6 +15,10 @@ const MatchSchema = new Schema({
         type: Number,
         min: 1
     },
+    _organizer: {
+        type: String,
+        ref: 'Organizer'
+    },
     _tournament: {
         type: String,
         ref: 'Tournament'
@@ -23,11 +27,11 @@ const MatchSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    _team1: {
+    team1: {
         type: TeamSchema,
         required: true
     },
-    _team2: {
+    team2: {
         type: TeamSchema,
         required: true
     },

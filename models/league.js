@@ -34,16 +34,16 @@ const LeagueStandingSchema = new Schema({
     }
 });
 
-const leagueSchema = new Schema({
+const LeagueSchema = new Schema({
     _id: { // automatically created
         type: String,
         required: true
     },
     options: {},
-    _matches: [{
+    /*_matches: [{
         type: Schema.Types.ObjectId,
         ref: 'Match'
-    }],
+    }],*/
     standings: [
         LeagueStandingSchema
     ]
@@ -51,4 +51,27 @@ const leagueSchema = new Schema({
     discriminatorKey: 'kind'
 });
 
-Tournament.discriminator('League', leagueSchema);
+/*
+ * _id validation
+ */
+
+LeagueSchema.path('_id').validate(function (_id, respond) {
+    respond(!this.isNew || /^[a-zA-Z0-9_]+$/.test(_id));
+}, '_id must consist of alpha-numerical characters and _');
+
+LeagueSchema.path('_id').validate(function (_id, respond) {
+    respond(this.isNew || !this.isModified('_id'));
+}, '_id cannot be changed');
+
+LeagueSchema.path('_id').validate(function (_id, respond) {
+    const Organizer = mongoose.model('Organizer');
+    if (this.isNew) {
+        Organizer.find({_id: _id}).exec(function (error, organizers) {
+            respond(!error && organizers.length == 0);
+        })
+    } else {
+        respond(true);
+    }
+}, '_id must be unique');
+
+Tournament.discriminator('League', LeagueSchema);
