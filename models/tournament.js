@@ -39,29 +39,6 @@ TournamentSchema = new Schema({
 });
 
 /*
- * _id validation
- */
-
-TournamentSchema.path('_id').validate(function (_id, respond) {
-    respond(!this.isNew || /^[a-zA-Z0-9_]+$/.test(_id));
-}, '_id must consist of alpha-numerical characters and _');
-
-TournamentSchema.path('_id').validate(function (_id, respond) {
-    respond(this.isNew || !this.isModified('_id'));
-}, '_id cannot be changed');
-
-TournamentSchema.path('_id').validate(function (_id, respond) {
-    const Organizer = mongoose.model('Organizer');
-    if (this.isNew) {
-        Organizer.find({_id: _id}).exec(function (error, organizers) {
-            respond(error || organizers.length == 0);
-        })
-    } else {
-        respond(true);
-    }
-}, '_id must be unique');
-
-/*
  * _organizer validation
  */
 
@@ -102,6 +79,6 @@ TournamentSchema.path('longName').validate(function (longName, respond) {
     Tournament.find({_organizer: this._organizer, longName: longName}).exec(function (error, tournaments) {
         respond(error || this.isNew ? tournaments.length == 0 : tournaments.length == 1);
     });
-}, "name already exists for given organizer");
+}, "longName already exists for given organizer");
 
 mongoose.model('Tournament', TournamentSchema);

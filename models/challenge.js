@@ -51,10 +51,6 @@ var ChallengeSchema = new Schema({
     lineUp: [
         ChallengeStandingSchema
     ],
-    /*matches: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Match'
-    }],*/
     standings: [
         ChallengeStandingSchema
     ]
@@ -75,10 +71,9 @@ ChallengeSchema.path('_id').validate(function (_id, respond) {
 }, '_id cannot be changed');
 
 ChallengeSchema.path('_id').validate(function (_id, respond) {
-    const Organizer = mongoose.model('Organizer');
     if (this.isNew) {
-        Organizer.find({_id: _id}).exec(function (error, organizers) {
-            respond(!error && organizers.length == 0);
+        Tournament.find({_id: _id, _organizer: this._organizer}).exec(function (error, tournaments) {
+            respond(error || tournaments.length == 0);
         })
     } else {
         respond(true);
