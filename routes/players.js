@@ -16,20 +16,32 @@ router.get('/api/players', function (request, response, next) {
     });
 });
 
-router.post('/api/players', function (request, response, next) {
+router.get('/api/organizers/:id/players', function (request, response, next) {
+    var organizerId = request.params.id;
+    Player.find({_organizer: organizerId}, function (error, players) {
+        if (error) {
+            next(new Error(error));
+        } else {
+            response.send(players);
+        }
+    });
+});
+
+router.post('/api/organizers/:id/players', function (request, response, next) {
     var data = request.body;
-    Organizer.findOne({_id: data.organizer}, function (error, organizer) {
+    var organizerId = request.params.id;
+    Organizer.findOne({_id: organizerId}, function (error, organizer) {
         if (error) {
             next(error);
         } else if (organizer == null) {
             next(new Error("Organizer does not exist"));
         } else {
             var player = new Player({
-                _id: data.organizer + '_' + data.name,
+                _id: organizerId + '_' + data.name,
                 name: data.name,
                 fullName: data.fullName || '',
                 nickName: data.nickName || '',
-                _organizer: data.organizer
+                _organizer: organizerId
             });
             player.save(function (error, player) {
                 if (error) {
@@ -40,34 +52,6 @@ router.post('/api/players', function (request, response, next) {
             });
         }
     });
-});
-
-router.put('/api/players/:id', function (request, response, next) {
-    var id = request.params.id;
-    var data = request.body;
-    Player.findById(id, function (error, player) {
-        player.name = data.name || player.name;
-        player.nickName = data.nickName || player.nickName;
-        player.fullName = data.fullName || player.fullName;
-        player.save(function (error, player) {
-            if (error) {
-                next(new Error(error));
-            } else {
-                response.send(player);
-            }
-        });
-    });
-});
-
-router.delete('/api/players/:id', function (request, response, next) {
-    var id = request.params.id;
-    Player.findOneAndRemove({'_id': id}, function (error) {
-        if (error) {
-            next(new Error(error));
-        } else {
-            response.send('ok');
-        }
-    })
 });
 
 router.put('/api/organizers/:id/players/:name', function (request, response, next) {

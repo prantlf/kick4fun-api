@@ -5,9 +5,10 @@ const Tournament = mongoose.model('Tournament');
 
 var router = express.Router();
 
-router.get('/api/tournaments/:id/participants', function (request, response, next) {
-    var id = request.params.id;
-    Tournament.findById(id, function (error, tournament) {
+router.get('api/organizers/:id/tournaments/:name/participants', function (request, response, next) {
+    var organizerId = request.params.id;
+    var tournamentName = request.params.name;
+    Tournament.find({_organizer: organizerId, name: tournamentName}, function (error, tournament) {
         if (error) {
             next(error);
         } else if (tournament == null) {
@@ -18,13 +19,7 @@ router.get('/api/tournaments/:id/participants', function (request, response, nex
     });
 });
 
-//router.get('api/organizers/:id/tournaments/:name/participants')
-
-//router.put('/api/tournaments/:id/participants')
-
-//router.put('api/organizers/:id/tournaments/:name/participants')
-
-//router.delete('api/tournaments/:id/participants/:name')
+//router.post('api/organizers/:id/tournaments/:name/participants')
 
 //router.delete('api/organizers/:id/tournaments/:tname/participants/:pname')
 

@@ -2,10 +2,6 @@ var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 
 TournamentSchema = new Schema({
-    /*_id: { // automatically created
-        type: String,
-        required: true
-    },*/
     name: {
         type: String,
         required: true
@@ -26,9 +22,9 @@ TournamentSchema = new Schema({
         type: String,
         default: 'planned',
         enum: [
-            'planned',      // not yet set up completely
-            'prepared',     // set up completely
-            'progress',     // with partial results
+            'build',        // not yet set up completely
+            'ready',        // set up completely
+            'progress',     // started & with partial results
             'completed',    // with complete results
             'archived'      // intermediate standings removed?
         ]
@@ -58,7 +54,7 @@ TournamentSchema.path('_id').validate(function (_id, respond) {
     const Organizer = mongoose.model('Organizer');
     if (this.isNew) {
         Organizer.find({_id: _id}).exec(function (error, organizers) {
-            respond(!error && organizers.length == 0);
+            respond(error || organizers.length == 0);
         })
     } else {
         respond(true);
@@ -87,23 +83,13 @@ TournamentSchema.path('name').validate(function (name, respond) {
 
 TournamentSchema.path('name').validate(function (name, respond) {
     const Tournament = mongoose.model('Tournament');
-    Tournament.find({_organizer: this._organizer}).exec(function (error, tournaments) {
-        if (error) {
-            respond(false);
-        } else {
-            var first = true;
-            for (var i = 0; i < tournaments.length; i++) {
-                if (tournaments[i].name === name) {
-                    if (!this.isNew && first) {
-                        first = false;
-                    } else {
-                        respond(false);
-                    }
-                }
-            }
-            respond(true);
-        }
-    })
+    if (this.isNew) {
+        Tournament.find({_organizer: this._organizer, name: name}).exec(function (error, tournaments) {
+            respond(error || tournaments.length == 0);
+        });
+    } else {
+        respond(true);
+    }
 
 }, "name already exists for given organizer");
 
@@ -113,23 +99,9 @@ TournamentSchema.path('name').validate(function (name, respond) {
 
 TournamentSchema.path('longName').validate(function (longName, respond) {
     const Tournament = mongoose.model('Tournament');
-    Tournament.find({_organizer: this._organizer}).exec(function (error, tournaments) {
-        if (error) {
-            respond(false);
-        } else {
-            var first = true;
-            for (var i = 0; i < tournaments.length; i++) {
-                if (tournaments[i].longName === longName) {
-                    if (!this.isNew && first) {
-                        first = false;
-                    } else {
-                        respond(false);
-                    }
-                }
-            }
-            respond(true);
-        }
-    })
+    Tournament.find({_organizer: this._organizer, longName: longName}).exec(function (error, tournaments) {
+        respond(error || this.isNew ? tournaments.length == 0 : tournaments.length == 1);
+    });
 }, "name already exists for given organizer");
 
 mongoose.model('Tournament', TournamentSchema);

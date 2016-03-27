@@ -42,7 +42,7 @@ PlayerSchema.path('_id').validate(function (_id, respond) {
     const Organizer = mongoose.model('Organizer');
     if (this.isNew) {
         Organizer.find({_id: _id}).exec(function (error, organizers) {
-            respond(!error && organizers.length == 0);
+            respond(error || organizers.length == 0);
         })
     } else {
         respond(true);
@@ -71,23 +71,13 @@ PlayerSchema.path('name').validate(function (name, respond) {
 
 PlayerSchema.path('name').validate(function (name, respond) {
     const Player = mongoose.model('Player');
-    Player.find({_organizer: this._organizer}).exec(function (error, players) {
-        if (error) {
-            respond(false);
-        } else {
-            var first = true;
-            for (var i = 0; i < players.length; i++) {
-                if (players[i].name === name) {
-                    if (!this.isNew && first) {
-                        first = false;
-                    } else {
-                        respond(false);
-                    }
-                }
-            }
-            respond(true);
-        }
-    })
+    if (this.isNew) {
+        Player.find({_organizer: this._organizer, name: name}).exec(function (error, players) {
+            respond(error || players.length === 0);
+        });
+    } else {
+        respond(true);
+    }
 }, "name already exists for given organizer");
 
 mongoose.model('Player', PlayerSchema);
