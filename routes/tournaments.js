@@ -20,7 +20,7 @@ router.get('/api/tournaments', function (request, response, next) {
 
 router.get('/api/organizers/:id/tournaments', function (request, response, next) {
     var organizerId = request.params.id;
-    Tournament.find({_organizer: organizerId},function (error, tournaments) {
+    Tournament.find({_organizer: organizerId}, function (error, tournaments) {
         if (error) {
             next(new Error(error));
         } else {
@@ -50,16 +50,18 @@ router.post('/api/organizers/:id/tournaments', function (request, response, next
                     tournament = new League(initData);
                 } else if (data.kind == 'Challenge') {
                     tournament = new Challenge(initData);
-                } else {
-                    next(new Error("Tournament kind ' + data.kind + ' does not exist"));
                 }
-                tournament.save(function (error, tournament) {
-                    if (error) {
-                        next(new Error(error));
-                    } else {
-                        response.send(tournament);
-                    }
-                });
+                if (tournament) {
+                    tournament.save(function (error, tournament) {
+                        if (error) {
+                            next(new Error(error));
+                        } else {
+                            response.send(tournament);
+                        }
+                    });
+                } else {
+                    next(new Error('Tournament kind ' + data.kind + ' does not exist'));
+                }
             }
         }
     );

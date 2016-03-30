@@ -20,7 +20,7 @@ TournamentSchema = new Schema({
     },
     status: {
         type: String,
-        default: 'planned',
+        default: 'build',
         enum: [
             'build',        // not yet set up completely
             'ready',        // set up completely
@@ -76,8 +76,9 @@ TournamentSchema.path('name').validate(function (name, respond) {
 
 TournamentSchema.path('longName').validate(function (longName, respond) {
     const Tournament = mongoose.model('Tournament');
+    var self = this;
     Tournament.find({_organizer: this._organizer, longName: longName}).exec(function (error, tournaments) {
-        respond(error || this.isNew ? tournaments.length == 0 : tournaments.length == 1);
+        respond(error || self.isNew ? tournaments.length == 0 : tournaments.length == 1);
     });
 }, "longName already exists for given organizer");
 
