@@ -18,7 +18,7 @@ router.get('/api/tournaments', function (request, response, next) {
     });
 });
 
-router.get('/api/organizer/:id/tournaments', function (request, response, next) {
+router.get('/api/organizers/:id/tournaments', function (request, response, next) {
     var organizerId = request.params.id;
     Tournament.find({_organizer: organizerId},function (error, tournaments) {
         if (error) {
