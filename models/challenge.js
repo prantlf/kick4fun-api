@@ -16,13 +16,13 @@ const ChallengeStandingSchema = new Schema({
         type: Number,
         required: true
     },
-    grade: {
+    level: {
         type: Number,
-        required: true
+        default: 0
     },
     numMatches: {
         type: Number,
-        required: true
+        default: 0
     }
 });
 
@@ -32,6 +32,11 @@ var ChallengeSchema = new Schema({
         required: true
     },
     options: {
+        basePoints: {
+            type: Number,
+            required: true,
+            default: 20
+        },
         matchPoints: {
             type: Number,
             required: true,

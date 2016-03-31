@@ -72,23 +72,29 @@ router.put('/api/organizers/:id/tournaments/:name', function (request, response,
     var tournamentName = request.params.name;
     var data = request.body;
     Tournament.findOne({'_organizer': organizerId, 'name': tournamentName}, function (error, tournament) {
-        tournament.name = data.name || tournament.name;
-        tournament.longName = data.longName || tournament.longName;
-        tournament.description = data.description || tournament.description;
-        tournament.save(function (error, tournament) {
-            if (error) {
-                next(new Error(error));
-            } else {
-                response.send(tournament);
-            }
-        });
+        if (error) {
+            next(error);
+        } else if (organizer == null) {
+            next(new Error("Organizer does not exist"));
+        } else {
+            tournament.name = data.name || tournament.name;
+            tournament.longName = data.longName || tournament.longName;
+            tournament.description = data.description || tournament.description;
+            tournament.save(function (error, tournament) {
+                if (error) {
+                    next(new Error(error));
+                } else {
+                    response.send(tournament);
+                }
+            });
+        }
     });
 });
 
 router.delete('/api/organizers/:id/tournaments/:name', function (request, response, next) {
     var organizerId = request.params.id;
     var tournamentName = request.params.name;
-    Player.findOneAndRemove({'_organizer': organizerId, 'name': tournamentName}, function (error) {
+    Tournament.findOneAndRemove({'_organizer': organizerId, 'name': tournamentName}, function (error) {
         if (error) {
             next(new Error(error));
         } else {
@@ -97,7 +103,57 @@ router.delete('/api/organizers/:id/tournaments/:name', function (request, respon
     })
 });
 
-//router.put('/api/organizers/:id/tournaments/:name/prepare')
+router.put('/api/organizers/:id/tournaments/:name/prepare', function (request, response, next) {
+    var organizerId = request.params.id;
+    var tournamentName = request.params.name;
+    Tournament.findOne({'_organizer': organizerId, 'name': tournamentName}, function (error, tournament) {
+        if (error) {
+            next(new Error(error));
+        } else if (tournament.kind == 'Challenge') {
+            tournament.lineUp.sort(compareChallenge);
+            var ctr = 0, levels = 0;
+            while (ctr < tournament.participants.length) {
+                levels += 1;
+                ctr += levels;
+            }
+            ctr = 1;
+            var countDown = 1;
+            for (var i = 0; i < tournament.lineUp.length; ++i) {
+                if (countDown == 0) {
+                    ctr += 1;
+                    countDown = ctr;
+                    levels -= 1;
+                }
+                tournament.lineUp[i].level = levels;
+                tournament.lineUp[i].score += tournament.options.basePoints;
+                countDown--;
+            }
+            tournament.save(function (error, tournament) {
+                if (error) {
+                    next(new Error(error));
+                } else {
+                    response.send(tournament);
+                }
+            });
+        }
+    });
+});
+
+function compareChallenge(a, b) {
+    if (a.score < b.score) {
+        return 1;
+    } else if (a.score > b.score) {
+        return -1;
+    } else if (a.fineScore < b.fineScore) {
+        return 1;
+    } else if (a.fineScore > b.fineScore) {
+        return -1;
+    } else if (a.player > b.player) {
+        return 1;
+    } else {
+        return -1;
+    }
+}
 
 //router.put('/api/organizers/:id/tournaments/:name/start')
 
