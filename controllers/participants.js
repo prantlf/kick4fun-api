@@ -1,12 +1,9 @@
-var express = require('express');
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 const Tournament = mongoose.model('Tournament');
 const Player = mongoose.model('Player');
 
-var router = express.Router();
-
-router.get('/api/organizers/:id/tournaments/:name/participants', function (request, response, next) {
+exports.list = function (request, response, next) {
     var organizerId = request.params.id;
     var tournamentName = request.params.name;
     Tournament.find({_organizer: organizerId, name: tournamentName}, function (error, tournament) {
@@ -18,9 +15,9 @@ router.get('/api/organizers/:id/tournaments/:name/participants', function (reque
             response.send(tournament.participants || []);
         }
     });
-});
+};
 
-router.post('/api/organizers/:id/tournaments/:name/participants', function (request, response, next) {
+exports.create = function (request, response, next) {
     var participantName = request.body.name;
     var options = request.body.options || {};
     var organizerId = request.params.id;
@@ -62,9 +59,9 @@ router.post('/api/organizers/:id/tournaments/:name/participants', function (requ
             });
         }
     });
-});
+};
 
-router.delete('/api/organizers/:id/tournaments/:tname/participants/:pname', function (request, response, next) {
+exports.delete = function (request, response, next) {
     var organizerId = request.params.id;
     var tournamentName = request.params.tname;
     var participantName = request.params.pname;
@@ -96,6 +93,4 @@ router.delete('/api/organizers/:id/tournaments/:tname/participants/:pname', func
             });
         }
     });
-});
-
-module.exports = router;
+};

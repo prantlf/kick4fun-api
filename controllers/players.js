@@ -1,12 +1,9 @@
-var express = require('express');
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-const Player = mongoose.model('Player');
 const Organizer = mongoose.model('Organizer');
+const Player = mongoose.model('Player');
 
-var router = express.Router();
-
-router.get('/api/players', function (request, response, next) {
+exports.listAll = function (request, response, next) {
     Player.find(function (error, players) {
         if (error) {
             next(new Error(error));
@@ -14,9 +11,9 @@ router.get('/api/players', function (request, response, next) {
             response.send(players);
         }
     });
-});
+};
 
-router.get('/api/organizers/:id/players', function (request, response, next) {
+exports.list = function (request, response, next) {
     var organizerId = request.params.id;
     Player.find({_organizer: organizerId}, function (error, players) {
         if (error) {
@@ -25,9 +22,9 @@ router.get('/api/organizers/:id/players', function (request, response, next) {
             response.send(players);
         }
     });
-});
+};
 
-router.post('/api/organizers/:id/players', function (request, response, next) {
+exports.create = function (request, response, next) {
     var data = request.body;
     var organizerId = request.params.id;
     Organizer.findOne({_id: organizerId}, function (error, organizer) {
@@ -52,9 +49,9 @@ router.post('/api/organizers/:id/players', function (request, response, next) {
             });
         }
     });
-});
+};
 
-router.put('/api/organizers/:id/players/:name', function (request, response, next) {
+exports.update = function (request, response, next) {
     var organizerId = request.params.id;
     var playerName = request.params.name;
     var data = request.body;
@@ -70,9 +67,9 @@ router.put('/api/organizers/:id/players/:name', function (request, response, nex
             }
         });
     });
-});
+};
 
-router.delete('/api/organizers/:id/players/:name', function (request, response, next) {
+exports.delete = function (request, response, next) {
     var organizerId = request.params.id;
     var playerName = request.params.name;
     Player.findOneAndRemove({'_organizer': organizerId, 'name': playerName}, function (error) {
@@ -82,6 +79,4 @@ router.delete('/api/organizers/:id/players/:name', function (request, response, 
             response.send('ok');
         }
     })
-});
-
-module.exports = router;
+};

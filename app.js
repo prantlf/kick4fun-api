@@ -2,7 +2,6 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-const join = require('path').join;
 const fs = require('fs');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -24,39 +23,18 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// load mongoose models
-/*
-var modelPath = join(__dirname, 'models');
-fs.readdirSync(modelPath).forEach(function (file) {
-    require(join(modelPath, file));
-});
-*/
-// load order is important due to inherited models
-require(join(__dirname, 'models/organizer'));
-require(join(__dirname, 'models/player'));
-require(join(__dirname, 'models/tournament'));
-require(join(__dirname, 'models/challenge'));
-require(join(__dirname, 'models/league'));
-require(join(__dirname, 'models/matchday'));
-require(join(__dirname, 'models/match'));
+// load mongoose models in correct order (inherited models)
+require('./models/organizer');
+require('./models/player');
+require('./models/tournament');
+require('./models/challenge');
+require('./models/league');
+require('./models/matchday');
+require('./models/match');
 
 // express routes
-var routes = require('./routes/index');
-var organizers = require('./routes/organizers');
-var players = require('./routes/players');
-var tournaments = require('./routes/tournaments');
-var participants = require('./routes/participants');
-var matches = require('./routes/matches');
-//var matchDays = require('./routes/matchDays');
-
+var routes = require('./routes');
 app.use('/', routes);
-app.use('/', organizers);
-app.use('/', players);
-app.use('/', tournaments);
-app.use('/', participants);
-app.use('/', matches);
-//app.use('/', matchDays);
-
 
 // connect to Mongo DB
 var mongoUrl = 'localhost:27017';

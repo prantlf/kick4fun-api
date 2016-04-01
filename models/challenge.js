@@ -1,4 +1,4 @@
-var mongoose = require('mongoose')
+const mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 
 const Tournament = mongoose.model('Tournament');
@@ -26,7 +26,7 @@ const ChallengeStandingSchema = new Schema({
     }
 });
 
-var ChallengeSchema = new Schema({
+const ChallengeSchema = new Schema({
     _id: { // automatically created
         type: String,
         required: true

@@ -1,11 +1,8 @@
-var express = require('express');
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 const Organizer = mongoose.model('Organizer');
 
-var router = express.Router();
-
-router.get('/api/organizers', function (request, response, next) {
+exports.list = function (request, response, next) {
     Organizer.find(function (error, organizers) {
         if (!error) {
             response.send(organizers);
@@ -13,9 +10,9 @@ router.get('/api/organizers', function (request, response, next) {
             next(new Error(error));
         }
     });
-});
+};
 
-router.post('/api/organizers', function (request, response, next) {
+exports.create = function (request, response, next) {
     var data = request.body;
     var organizer = new Organizer({
         _id: data.name || '',
@@ -31,9 +28,9 @@ router.post('/api/organizers', function (request, response, next) {
             response.send(organizer);
         }
     });
-});
+};
 
-router.put('/api/organizers/:id', function (request, response, next) {
+exports.update = function(request, response, next) {
     var id = request.params.id;
     var data = request.body;
     Organizer.findById(id, function (err, organizer) {
@@ -50,9 +47,9 @@ router.put('/api/organizers/:id', function (request, response, next) {
             }
         });
     });
-});
+};
 
-router.delete('/api/organizers/:id', function (request, response, next) {
+exports.delete = function (request, response, next) {
     var id = request.params.id;
     Organizer.findOneAndRemove({'_id': id}, function (error) {
         if (error) {
@@ -61,6 +58,4 @@ router.delete('/api/organizers/:id', function (request, response, next) {
             response.send('ok');
         }
     })
-});
-
-module.exports = router;
+};
