@@ -107,8 +107,11 @@ router.put('/api/organizers/:id/tournaments/:name/prepare', function (request, r
     var organizerId = request.params.id;
     var tournamentName = request.params.name;
     Tournament.findOne({'_organizer': organizerId, 'name': tournamentName}, function (error, tournament) {
+        var ready = false;
         if (error) {
             next(new Error(error));
+        } else if (tournament.status != 'build') {
+            next(new Error('Tournament is not in build status'));
         } else if (tournament.kind == 'Challenge') {
             tournament.lineUp.sort(compareChallenge);
             var ctr = 0, levels = 0;
@@ -125,9 +128,57 @@ router.put('/api/organizers/:id/tournaments/:name/prepare', function (request, r
                     levels -= 1;
                 }
                 tournament.lineUp[i].level = levels;
-                tournament.lineUp[i].score += tournament.options.basePoints;
                 countDown--;
             }
+            ready = true;
+        } else if (tournament.kind == 'League') {
+            // ....
+            ready = true;
+        } else {
+            next(new Error('Tournament kind ' + data.kind + ' does not exist'));
+        }
+        if (ready) {
+            tournament.status = 'ready';
+            tournament.save(function (error, tournament) {
+                if (error) {
+                    next(new Error(error));
+                } else {
+                    response.send(tournament);
+                }
+            });
+        }
+    });
+});
+
+router.put('/api/organizers/:id/tournaments/:name/start', function (request, response, next) {
+    var organizerId = request.params.id;
+    var tournamentName = request.params.name;
+    Tournament.findOne({'_organizer': organizerId, 'name': tournamentName}, function (error, tournament) {
+        var progress = false;
+        if (error) {
+            next(new Error(error));
+        } else if (tournament.status != 'ready') {
+            next(new Error('Tournament is not in ready status'));
+        } else if (tournament.kind == 'Challenge') {
+            for (var i = 0; i < tournament.lineUp.length; ++i) {
+                tournament.lineUp[i].score += tournament.options.basePoints;
+                var clone = {};
+                clone.player = tournament.lineUp[i].player;
+                clone.score = tournament.lineUp[i].score;
+                clone.fineScore = tournament.lineUp[i].fineScore;
+                clone.level = tournament.lineUp[i].level;
+                clone.numMatches = tournament.lineUp[i].numMatches;
+                tournament.standings.push(clone);
+            }
+            progress = true;
+        } else if (tournament.kind == 'League') {
+            // ....
+            progress = true;
+        } else {
+            next(new Error('Tournament kind ' + data.kind + ' does not exist'));
+        }
+        if (progress) {
+            tournament.status = 'progress';
             tournament.save(function (error, tournament) {
                 if (error) {
                     next(new Error(error));
@@ -154,7 +205,5 @@ function compareChallenge(a, b) {
         return -1;
     }
 }
-
-//router.put('/api/organizers/:id/tournaments/:name/start')
 
 module.exports = router;

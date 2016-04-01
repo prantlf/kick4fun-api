@@ -11,17 +11,24 @@ const TeamSchema = new Schema([{
 }]);
 
 const MatchSchema = new Schema({
-    number: {
+    _id: { // automatically created
+        type: String,
+        required: true
+    },
+    number: { // automatically created
         type: Number,
-        min: 1
+        min: 1,
+        required: true
     },
     _organizer: {
         type: String,
-        ref: 'Organizer'
+        ref: 'Organizer',
+        required: true
     },
     _tournament: {
         type: String,
-        ref: 'Tournament'
+        ref: 'Tournament',
+        required: true
     },
     date: {
         type: Date,
