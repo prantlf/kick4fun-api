@@ -1,11 +1,38 @@
 const mongoose = require('mongoose');
 const Challenge = mongoose.model('Challenge');
 
-exports.create = function(initialData) {
+exports.create = function (initialData) {
     return new Challenge(initialData);
 };
 
-exports.prepare = function(challenge) {
+exports.addParticipant = function (challenge, name, options) {
+    if (challenge.status != 'build' && challenge.status != 'ready' && challenge.status != 'progress') {
+        return 'Challenge is not in build or progress status';
+    } else {
+        challenge.participants.push(name);
+        challenge.lineUp.push({
+            player: name,
+            score: options.score || 0,
+            fineScore: options.fineScore || (1 - challenge.participants.length / 100)
+        });
+    }
+};
+
+exports.removeParticipant = function (challenge, name) {
+    if (challenge.status != 'build') {
+        return 'Challenge is not in build status';
+    } else {
+        challenge.participants.remove(name);
+        for (var i = 0; i < challenge.lineUp.length; ++i) {
+            if (challenge.lineUp[i].player == name) {
+                challenge.lineUp.splice(i, 1);
+                break;
+            }
+        }
+    }
+};
+
+exports.prepare = function (challenge) {
     challenge.lineUp.sort(compare);
     var ctr = 0, levels = 0;
     while (ctr < challenge.participants.length) {
@@ -23,10 +50,9 @@ exports.prepare = function(challenge) {
         challenge.lineUp[i].level = levels;
         countDown--;
     }
-    return '';
 };
 
-exports.start = function(challenge) {
+exports.start = function (challenge) {
     for (var i = 0; i < challenge.lineUp.length; ++i) {
         challenge.lineUp[i].score += challenge.options.basePoints;
         var clone = {};
@@ -37,7 +63,14 @@ exports.start = function(challenge) {
         clone.numMatches = challenge.lineUp[i].numMatches;
         challenge.standings.push(clone);
     }
-    return '';
+};
+
+exports.addMatch = function(challenge, match) {
+    if (challenge.status != 'progress') {
+        return 'Challenge is not in progress status';
+    } else {
+        
+    }
 };
 
 function compare(a, b) {

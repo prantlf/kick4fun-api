@@ -38,7 +38,7 @@ exports.create = function (request, response, next) {
             if (error) {
                 next(error);
             } else if (organizer == null) {
-                next(new Error("Organizer does not exist"));
+                next({message: "Organizer does not exist", status: 400});
             } else {
                 var tournament = null;
                 var initialData = {
@@ -61,7 +61,7 @@ exports.create = function (request, response, next) {
                         }
                     });
                 } else {
-                    next(new Error('Tournament kind ' + data.kind + ' does not exist'));
+                    next({message: 'Tournament kind ' + data.kind + ' does not exist', status: 400});
                 }
             }
         }
@@ -74,9 +74,9 @@ exports.update = function (request, response, next) {
     var data = request.body;
     Tournament.findOne({'_organizer': organizerId, 'name': tournamentName}, function (error, tournament) {
         if (error) {
-            next(error);
-        } else if (organizer == null) {
-            next(new Error("Organizer does not exist"));
+            next(new Error(error));
+        } else if (tournament == null) {
+            next({message: "Organizer does not exist", status: 400});
         } else {
             tournament.name = data.name || tournament.name;
             tournament.longName = data.longName || tournament.longName;
@@ -95,11 +95,13 @@ exports.update = function (request, response, next) {
 exports.delete = function (request, response, next) {
     var organizerId = request.params.id;
     var tournamentName = request.params.name;
-    Tournament.findOneAndRemove({'_organizer': organizerId, 'name': tournamentName}, function (error) {
+    Tournament.findOneAndRemove({'_organizer': organizerId, 'name': tournamentName}, function (error, model) {
         if (error) {
             next(new Error(error));
+        } else if (!model) {
+            next({message: 'Player does not exist', status: 400});
         } else {
-            response.send('ok');
+            response.sendStatus(204);
         }
     })
 };
@@ -119,7 +121,7 @@ exports.prepare = function (request, response, next) {
             }
         }
         if (error) {
-            next(error);
+            next(new Error(error));
         } else {
             tournament.status = 'ready';
             tournament.save(function (error, tournament) {
@@ -148,7 +150,7 @@ exports.start = function (request, response, next) {
             }
         }
         if (error) {
-            next(error);
+            next(new Error(error));
         } else {
             tournament.status = 'progress';
             tournament.save(function (error, tournament) {
@@ -162,4 +164,61 @@ exports.start = function (request, response, next) {
     });
 };
 
+exports.finish = function (request, response, next) {
+    var organizerId = request.params.id;
+    var tournamentName = request.params.name;
+    Tournament.findOne({'_organizer': organizerId, 'name': tournamentName}, function (error, tournament) {
+        if (!error) {
+            var kind = tournament.kind.toLowerCase();
+            if (tournament.status != 'progress') {
+                error = 'Tournament is not in progress status';
+            } else if (tournamentTypes[kind]) {
+                error = tournamentTypes[kind].finish(tournament);
+            } else {
+                error = 'Tournament kind ' + tournament.kind + ' does not exist';
+            }
+        }
+        if (error) {
+            next(new Error(error));
+        } else {
+            tournament.status = 'completed';
+            tournament.save(function (error, tournament) {
+                if (error) {
+                    next(new Error(error));
+                } else {
+                    response.send(tournament);
+                }
+            });
+        }
+    });
+};
+
+exports.archive = function (request, response, next) {
+    var organizerId = request.params.id;
+    var tournamentName = request.params.name;
+    Tournament.findOne({'_organizer': organizerId, 'name': tournamentName}, function (error, tournament) {
+        if (!error) {
+            var kind = tournament.kind.toLowerCase();
+            if (tournament.status != 'completed') {
+                error = 'Tournament is not in completed status';
+            } else if (tournamentTypes[kind]) {
+                error = tournamentTypes[kind].archive(tournament);
+            } else {
+                error = 'Tournament kind ' + tournament.kind + ' does not exist';
+            }
+        }
+        if (error) {
+            next(new Error(error));
+        } else {
+            tournament.status = 'archived';
+            tournament.save(function (error, tournament) {
+                if (error) {
+                    next(new Error(error));
+                } else {
+                    response.send(tournament);
+                }
+            });
+        }
+    });
+};
 

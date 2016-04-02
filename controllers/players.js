@@ -31,7 +31,7 @@ exports.create = function (request, response, next) {
         if (error) {
             next(error);
         } else if (organizer == null) {
-            next(new Error("Organizer does not exist"));
+            next({message: "Organizer does not exist", status: 400});
         } else {
             var player = new Player({
                 _id: organizerId + '_' + data.name,
@@ -72,11 +72,13 @@ exports.update = function (request, response, next) {
 exports.delete = function (request, response, next) {
     var organizerId = request.params.id;
     var playerName = request.params.name;
-    Player.findOneAndRemove({'_organizer': organizerId, 'name': playerName}, function (error) {
+    Player.findOneAndRemove({'_organizer': organizerId, 'name': playerName}, function (error, model) {
         if (error) {
             next(new Error(error));
+        } else if (!model) {
+            next({message: 'Player does not exist', status: 400});
         } else {
-            response.send('ok');
+            response.sendStatus(204);
         }
     })
 };

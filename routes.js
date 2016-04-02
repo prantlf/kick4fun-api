@@ -10,6 +10,7 @@ const organizers = require('./controllers/organizers');
 const players = require('./controllers/players');
 const tournaments = require('./controllers/tournaments');
 const participants = require('./controllers/participants');
+const matches = require('./controllers/matches');
 
 router.get('/api/organizers', organizers.list);
 router.post('/api/organizers', organizers.create);
@@ -32,11 +33,11 @@ router.put('/api/organizers/:id/tournaments/:name/prepare', tournaments.prepare)
 router.put('/api/organizers/:id/tournaments/:name/start', tournaments.start);
 
 router.get('/api/organizers/:id/tournaments/:name/participants', participants.list);
-router.post('/api/organizers/:id/tournaments/:name/participants', participants.create);
-router.delete('/api/organizers/:id/tournaments/:tname/participants/:pname', participants.delete);
+router.post('/api/organizers/:id/tournaments/:name/participants', participants.add);
+router.delete('/api/organizers/:id/tournaments/:tname/participants/:pname', participants.remove);
 
-//router.get('/api/organizers/:id/tournaments/:name/matches', );
-//router.post('/api/organizers/:id/tournaments/:name/matches', );
+router.get('/api/organizers/:id/tournaments/:name/matches', matches.list);
+router.post('/api/organizers/:id/tournaments/:name/matches', matches.add);
 //router.delete('/api/organizers/:id/tournaments/:name/matches/:num', );
 
 module.exports = router;

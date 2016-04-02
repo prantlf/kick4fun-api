@@ -1,23 +1,30 @@
+const fs = require('fs');
 const mongoose = require('mongoose');
 
 const Tournament = mongoose.model('Tournament');
 const Player = mongoose.model('Player');
 
+var tournamentTypes = {};
+fs.readdirSync('./tournaments').forEach(function (file) {
+    var component = file.substr(0, file.length - 3);
+    tournamentTypes[component] = require('../tournaments/' + component);
+});
+
 exports.list = function (request, response, next) {
     var organizerId = request.params.id;
     var tournamentName = request.params.name;
-    Tournament.find({_organizer: organizerId, name: tournamentName}, function (error, tournament) {
+    Tournament.findOne({_organizer: organizerId, name: tournamentName}, function (error, tournament) {
         if (error) {
             next(error);
         } else if (tournament == null) {
-            next(new Error('Tournament does not exist'));
+            next({message: 'Tournament does not exist', status: 400});
         } else {
             response.send(tournament.participants || []);
         }
     });
 };
 
-exports.create = function (request, response, next) {
+exports.add = function (request, response, next) {
     var participantName = request.body.name;
     var options = request.body.options || {};
     var organizerId = request.params.id;
@@ -29,25 +36,23 @@ exports.create = function (request, response, next) {
             next(new Error('Player does not exist for given Organizer'));
         } else {
             Tournament.findOne({_organizer: organizerId, name: tournamentName}).exec(function (error, tournament) {
-                if (error) {
-                    next(error);
-                } else if (tournament == null) {
-                    next(new Error('Tournament does not exist for given Organizer'));
-                } else if (tournament.kind == 'League' && tournament.status != 'build') {
-                    next(new Error('Tournament/League is not in build status'));
-                } else if (tournament.kind == 'Challenge' && tournament.status != 'build' && tournament.status != 'progress') {
-                    next(new Error('Tournament/Challenge is not in build or progress status'));
-                } else if (tournament.participants.indexOf(participantName) >= 0) {
-                    next(new Error('Player is already participant of tournament'));
-                } else {
-                    tournament.participants.push(participantName);
-                    if (tournament.kind == 'Challenge') {
-                        tournament.lineUp.push({
-                            player: participantName,
-                            score: options.score || 0,
-                            fineScore: options.fineScore || (1-tournament.participants.length/100)
-                        });
+                if (!error) {
+                    if (tournament == null) {
+                        error = 'Tournament does not exist for given Organizer';
+                    } else if (tournament.participants.indexOf(participantName) >= 0) {
+                        error = 'Player is already participant of tournament';
+                    } else {
+                        var kind = tournament.kind.toLowerCase();
+                        if (tournamentTypes[kind]) {
+                            error = tournamentTypes[kind].addParticipant(tournament, participantName, options);
+                        } else {
+                            error = 'Tournament kind ' + tournament.kind + ' does not exist';
+                        }
                     }
+                }
+                if (error) {
+                    next({message: error, status: 400});
+                } else {
                     tournament.save(function (error, tournament) {
                         if (error) {
                             next(new Error(error));
@@ -61,29 +66,28 @@ exports.create = function (request, response, next) {
     });
 };
 
-exports.delete = function (request, response, next) {
+exports.remove = function (request, response, next) {
     var organizerId = request.params.id;
     var tournamentName = request.params.tname;
     var participantName = request.params.pname;
     Tournament.findOne({_organizer: organizerId, name: tournamentName}).exec(function (error, tournament) {
-        if (error) {
-            next(error);
-        } else if (tournament == null) {
-            next(new Error('Tournament does not exist for given Organizer'));
-        } else if (tournament.status != 'build') {
-            next(new Error('Tournament is not in build status'));
-        } else if (tournament.participants.indexOf(participantName) < 0) {
-            next(new Error('Player is not participant of tournament'));
-        } else {
-            tournament.participants.remove(participantName);
-            if (tournament.kind = 'Challenge') {
-                for (var i = 0; i < tournament.lineUp.length; ++i) {
-                    if (tournament.lineUp[i].player == participantName) {
-                        tournament.lineUp.splice(i, 1);
-                        break;
-                    }
+        if (!error) {
+            if (tournament == null) {
+                error = 'Tournament does not exist for given Organizer';
+            } else if (tournament.participants.indexOf(participantName) < 0) {
+                error = 'Player is not participant of tournament';
+            } else {
+                var kind = tournament.kind.toLowerCase();
+                if (tournamentTypes[kind]) {
+                    error = tournamentTypes[kind].removeParticipant(tournament, participantName, options);
+                } else {
+                    error = 'Tournament kind ' + tournament.kind + ' does not exist';
                 }
             }
+        }
+        if (error) {
+            next({message: error, status: 400});
+        } else {
             tournament.save(function (error, tournament) {
                 if (error) {
                     next(new Error(error));

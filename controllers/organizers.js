@@ -51,11 +51,13 @@ exports.update = function(request, response, next) {
 
 exports.delete = function (request, response, next) {
     var id = request.params.id;
-    Organizer.findOneAndRemove({'_id': id}, function (error) {
+    Organizer.findOneAndRemove({'_id': id}, function (error, model) {
         if (error) {
             next(new Error(error));
+        } else if (!model) {
+            next({message: 'Organizer does not exist', status: 400});
         } else {
-            response.send('ok');
+            response.sendStatus(204);
         }
     })
 };
