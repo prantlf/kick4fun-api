@@ -20,4 +20,6 @@ const MatchDaySchema = new Schema({
         type: Date,
         required: true
     }
+}, {
+    _id: false
 });

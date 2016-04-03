@@ -48,7 +48,7 @@ exports.create = function (request, response, next) {
                     description: data.description || '',
                     _organizer: organizerId
                 };
-                var kind = data.kind.toLowerCase();
+                var kind = data.kind && data.kind.toLowerCase();
                 if (tournamentTypes[kind]) {
                     tournament = tournamentTypes[kind].create(initialData);
                 }

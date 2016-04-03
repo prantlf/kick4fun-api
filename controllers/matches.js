@@ -1,4 +1,5 @@
 const fs = require('fs');
+const _ = require('underscore');
 const mongoose = require('mongoose');
 
 const Tournament = mongoose.model('Tournament');
@@ -29,6 +30,14 @@ exports.add = function (request, response, next) {
         if (!error) {
             if (tournament == null) {
                 error = 'Tournament does not exist for given Organizer';
+            } else if (!data.team1 || !data.team2 || !data.result) {
+                error = 'Match is not complete';
+            } else if (!_each(data.team1.concat(data.team2), every(function (player) {
+                    return _.contains(tournament.participants, player);
+                }))) {
+                error = 'Not all players are participants';
+            } else if (data.result.length < 2) {
+                error = 'Match result is not complete';
             } else {
                 var kind = tournament.kind.toLowerCase();
                 if (tournamentTypes[kind]) {

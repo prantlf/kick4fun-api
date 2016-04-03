@@ -31,6 +31,7 @@ require('./models/challenge');
 require('./models/league');
 require('./models/matchday');
 require('./models/match');
+require('./models/standing');
 
 // express routes
 var routes = require('./routes');

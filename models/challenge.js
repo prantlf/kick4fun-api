@@ -24,12 +24,12 @@ const ChallengeSchema = new Schema({
         },
         winPoints: {
             type: String,
-            enum: ['opponent', 'difference'],
+            enum: ['opponent'],
             default: 'opponent'
         },
         lossPoints: {
             type: String,
-            enum: ['own', 'difference'],
+            enum: ['own'],
             default: 'own'
         }
     },

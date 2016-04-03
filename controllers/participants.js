@@ -1,4 +1,5 @@
 const fs = require('fs');
+const _ = require('underscore');
 const mongoose = require('mongoose');
 
 const Tournament = mongoose.model('Tournament');
@@ -39,7 +40,7 @@ exports.add = function (request, response, next) {
                 if (!error) {
                     if (tournament == null) {
                         error = 'Tournament does not exist for given Organizer';
-                    } else if (tournament.participants.indexOf(participantName) >= 0) {
+                    } else if (_.contains(tournament.participants, participantName)) {
                         error = 'Player is already participant of tournament';
                     } else {
                         var kind = tournament.kind.toLowerCase();
@@ -74,12 +75,12 @@ exports.remove = function (request, response, next) {
         if (!error) {
             if (tournament == null) {
                 error = 'Tournament does not exist for given Organizer';
-            } else if (tournament.participants.indexOf(participantName) < 0) {
+            } else if (!_.contains(tournament.participants, participantName)) {
                 error = 'Player is not participant of tournament';
             } else {
                 var kind = tournament.kind.toLowerCase();
                 if (tournamentTypes[kind]) {
-                    error = tournamentTypes[kind].removeParticipant(tournament, participantName, options);
+                    error = tournamentTypes[kind].removeParticipant(tournament, participantName);
                 } else {
                     error = 'Tournament kind ' + tournament.kind + ' does not exist';
                 }
@@ -92,7 +93,7 @@ exports.remove = function (request, response, next) {
                 if (error) {
                     next(new Error(error));
                 } else {
-                    response.send(tournament);
+                    response.sendStatus(204);
                 }
             });
         }

@@ -4,15 +4,15 @@ const mongoose = require('mongoose')
 const StandingSchema = new Schema({
     player: {
         type: String,
-        ref: 'Player'
+        required: true
     },
     score: {
         type: Number,
-        required: true
+        default: 0
     },
     fineScore: {
         type: Number,
-        required: true
+        default: 0
     },
     level: {
         type: Number,
@@ -20,22 +20,26 @@ const StandingSchema = new Schema({
     },
     wins: {
         type: Number,
-        required: true
+        default: 0
     },
     draws: {
         type: Number,
-        required: true
+        default: 0
     },
     losses: {
         type: Number,
-        required: true
+        default: 0
     },
     goalsScored: {
         type: Number,
-        required: true
+        default: 0
     },
     goalsShipped: {
         type: Number,
-        required: true
+        default: 0
     }
+}, {
+    _id: false
 });
+
+mongoose.model('Standing', StandingSchema);

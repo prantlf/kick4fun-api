@@ -31,6 +31,8 @@ router.delete('/api/organizers/:id/tournaments/:name', tournaments.delete);
 
 router.put('/api/organizers/:id/tournaments/:name/prepare', tournaments.prepare);
 router.put('/api/organizers/:id/tournaments/:name/start', tournaments.start);
+router.put('/api/organizers/:id/tournaments/:name/finish', tournaments.finish);
+router.put('/api/organizers/:id/tournaments/:name/archive', tournaments.archive);
 
 router.get('/api/organizers/:id/tournaments/:name/participants', participants.list);
 router.post('/api/organizers/:id/tournaments/:name/participants', participants.add);
