@@ -5,9 +5,9 @@ const Organizer = mongoose.model('Organizer');
 const Tournament = mongoose.model('Tournament');
 
 var tournamentTypes = {};
-fs.readdirSync('./tournaments').forEach(function (file) {
+fs.readdirSync('./controllers/tournamentTypes').forEach(function (file) {
     var component = file.substr(0, file.length - 3);
-    tournamentTypes[component] = require('../tournaments/' + component);
+    tournamentTypes[component] = require('../controllers/tournamentTypes/' + component);
 });
 
 exports.listAll = function (request, response, next) {

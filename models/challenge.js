@@ -3,28 +3,8 @@ const mongoose = require('mongoose')
 
 const Tournament = mongoose.model('Tournament');
 
-const ChallengeStandingSchema = new Schema({
-    player: {
-        type: String,
-        ref: 'Player'
-    },
-    score: {
-        type: Number,
-        required: true
-    },
-    fineScore: {
-        type: Number,
-        required: true
-    },
-    level: {
-        type: Number,
-        default: 0
-    },
-    numMatches: {
-        type: Number,
-        default: 0
-    }
-});
+const MatchSchema = require('./match');
+const StandingSchema = require('./standing');
 
 const ChallengeSchema = new Schema({
     _id: { // automatically created
@@ -54,10 +34,13 @@ const ChallengeSchema = new Schema({
         }
     },
     lineUp: [
-        ChallengeStandingSchema
+        StandingSchema
+    ],
+    matches: [
+        MatchSchema
     ],
     standings: [
-        ChallengeStandingSchema
+        StandingSchema
     ]
 }, {
     discriminatorKey: 'kind'

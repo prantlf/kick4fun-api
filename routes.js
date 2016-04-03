@@ -38,6 +38,7 @@ router.delete('/api/organizers/:id/tournaments/:tname/participants/:pname', part
 
 router.get('/api/organizers/:id/tournaments/:name/matches', matches.list);
 router.post('/api/organizers/:id/tournaments/:name/matches', matches.add);
-//router.delete('/api/organizers/:id/tournaments/:name/matches/:num', );
+router.put('/api/organizers/:id/tournaments/:name/matches/:num', matches.update);
+router.delete('/api/organizers/:id/tournaments/:name/matches/:num', matches.delete);
 
 module.exports = router;

@@ -1,33 +1,21 @@
 const mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 
-const TeamSchema = new Schema([{
-    type: String,
-    ref: 'Player',
-    check: {
-        minLength: 1,
-        maxLength: 2
+const TeamSchema = new Schema([
+    {
+        type: String,
+        ref: 'Player',
+        check: {
+            minLength: 1,
+            maxLength: 2
+        }
     }
-}]);
+]);
 
 const MatchSchema = new Schema({
-    _id: { // automatically created
-        type: String,
-        required: true
-    },
-    number: { // automatically created
+    number: { // assigned automatically
         type: Number,
         min: 1,
-        required: true
-    },
-    _organizer: {
-        type: String,
-        ref: 'Organizer',
-        required: true
-    },
-    _tournament: {
-        type: String,
-        ref: 'Tournament',
         required: true
     },
     date: {
@@ -78,5 +66,3 @@ MatchSchema.virtual('goals').get(function () {
     }
     return [g1, g2];
 });
-
-mongoose.model('Match', MatchSchema);
