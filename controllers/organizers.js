@@ -12,6 +12,19 @@ exports.list = function (request, response, next) {
     });
 };
 
+exports.listOne = function (request, response, next) {
+    var id = request.params.id;
+    Organizer.findOne({'_id': id}, function (error, organizer) {
+        if (error) {
+            next(new Error(error));
+        } else if (organizer == null) {
+            next(new Error('Tournament does not exist'));
+        } else {
+            response.send(organizer);
+        }
+    });
+};
+
 exports.create = function (request, response, next) {
     var data = request.body;
     var organizer = new Organizer({

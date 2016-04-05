@@ -13,18 +13,21 @@ const participants = require('./controllers/participants');
 const matches = require('./controllers/matches');
 
 router.get('/api/organizers', organizers.list);
+router.get('/api/organizers/:id', organizers.listOne);
 router.post('/api/organizers', organizers.create);
 router.put('/api/organizers/:id', organizers.update);
 router.delete('/api/organizers/:id', organizers.delete);
 
 router.get('/api/players', players.listAll);
 router.get('/api/organizers/:id/players', players.list);
+router.get('/api/organizers/:id/players/:name', players.listOne);
 router.post('/api/organizers/:id/players', players.create);
 router.put('/api/organizers/:id/players/:name', players.update);
 router.delete('/api/organizers/:id/players/:name', players.delete);
 
 router.get('/api/tournaments', tournaments.listAll);
 router.get('/api/organizers/:id/tournaments', tournaments.list);
+router.get('/api/organizers/:id/tournaments/:name', tournaments.listOne);
 router.post('/api/organizers/:id/tournaments', tournaments.create);
 router.put('/api/organizers/:id/tournaments/:name', tournaments.update);
 router.delete('/api/organizers/:id/tournaments/:name', tournaments.delete);

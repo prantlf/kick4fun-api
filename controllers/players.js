@@ -24,6 +24,20 @@ exports.list = function (request, response, next) {
     });
 };
 
+exports.listOne = function (request, response, next) {
+    var organizerId = request.params.id;
+    var playerName = request.params.name;
+    Player.find({_organizer: organizerId, 'name': playerName}, function (error, player) {
+        if (error) {
+            next(new Error(error));
+        } else if (player == null) {
+            next(new Error('Player does not exist'));
+        } else {
+            response.send(player);
+        }
+    });
+};
+
 exports.create = function (request, response, next) {
     var data = request.body;
     var organizerId = request.params.id;

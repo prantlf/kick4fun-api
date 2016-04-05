@@ -13,11 +13,15 @@ fs.readdirSync('./controllers/tournamentTypes').forEach(function (file) {
 exports.list = function (request, response, next) {
     var organizerId = request.params.id;
     var tournamentName = request.params.name;
-    Match.find({_organizer: organizerId, name: tournamentName}, function (error, matches) {
+    Tournament.findOne({_organizer: organizerId, name: tournamentName}, function (error, tournament) {
         if (error) {
-            next(error);
-        } else {
-            response.send(matches || []);
+            next(new Error(error));
+        }
+        else if (tournament == null) {
+            next(new Error('Torunament does not exist'));
+        }
+        else {
+            response.send(tournament.matches || []);
         }
     });
 };
