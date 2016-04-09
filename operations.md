@@ -5,22 +5,27 @@ POST = create item
 PUT = update item
 DELETE
 
-Url                                             Verbs               Optional filters
+Url                                                         Verbs               Optional filters
 ------------------------------------------------------------------------------------------------------------------------
-/api/v1/organizers                              GET, POST
-/api/v1/organizers/:name                        GET, DELETE, PUT
-/api/v1/organizers/:name/tournaments            GET
-/api/v1/tournaments                             GET, POST           organizer
-/api/v1/tournaments/:name                       GET, DELETE, PUT    participants (bool), standings (bool),
-                                                                    matches (bool)
-/api/v1/tournaments/:name/populate              PUT
-/api/v1/tournaments/:name/participants          GET
-/api/v1/tournaments/:name/standings             GET
-/api/v1/tournaments/:name/matches               GET
-/api/v1/tournaments/:name/matchDays             GET                 matches (bool)
-/api/v1/tournaments/:name/matchDays/:number     GET, DELETE, PUT    matches (bool)
-/api/v1/players                                 GET, POST           organizer, tournament
-/api/v1/players/:name                           GET, DELETE, PUT
-/api/v1/players/:name/tournaments               GET
-/api/v1/players/:name/matches                   GET                 tournament, completed (bool), upcoming (bool),
-                                                                    archived (bool)
+
+/api/organizers                                             GET, POST           -
+/api/organizers/:id                                         GET, PUT, DELETE    -
+
+/api/players                                                GET                 -
+/api/organizers/:id/players                                 GET, POST           -
+/api/organizers/:id/players/:name                           GET, PUT, DELETE    -
+
+/api/tournaments                                            GET                 -
+/api/organizers/:id/tournaments                             GET, POST           -
+/api/organizers/:id/tournaments/:name                       GET, PUT, DELETE    -
+
+/api/organizers/:id/tournaments/:name/prepare               PUT                 -
+/api/organizers/:id/tournaments/:name/start                 PUT                 -
+/api/organizers/:id/tournaments/:name/finish                PUT                 -
+/api/organizers/:id/tournaments/:name/archive               PUT                 -
+
+/api/organizers/:id/tournaments/:name/participants          GET, POST           -
+/api/organizers/:id/tournaments/:name/standings/:name       DELETE              -
+
+/api/organizers/:id/tournaments/:name/matches               GET, POST           -
+/api/organizers/:id/tournaments/:name/matches/:num          PUT, DELETE         -

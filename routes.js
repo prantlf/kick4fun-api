@@ -47,3 +47,5 @@ router.put('/api/organizers/:id/tournaments/:name/matches/:num', matches.update)
 router.delete('/api/organizers/:id/tournaments/:name/matches/:num', matches.delete);
 
 module.exports = router;
+
+// todo: participants add to challenge - time when added
