@@ -1,0 +1,6 @@
+
+// todo: participants add to challenge - wann added !!!
+// todo: beispiel !!!
+// todo: get single match
+// todo: challenge: doppelte Matches verbieten
+// todo: löschbedingungen

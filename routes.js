@@ -42,10 +42,9 @@ router.post('/api/organizers/:id/tournaments/:name/participants', participants.a
 router.delete('/api/organizers/:id/tournaments/:tname/participants/:pname', participants.remove);
 
 router.get('/api/organizers/:id/tournaments/:name/matches', matches.list);
+//router.get('/api/organizers/:id/tournaments/:name/matches/:num', matches.listOne);
 router.post('/api/organizers/:id/tournaments/:name/matches', matches.add);
 router.put('/api/organizers/:id/tournaments/:name/matches/:num', matches.update);
 router.delete('/api/organizers/:id/tournaments/:name/matches/:num', matches.delete);
 
 module.exports = router;
-
-// todo: participants add to challenge - time when added

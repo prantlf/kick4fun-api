@@ -18,7 +18,7 @@ exports.list = function (request, response, next) {
             next(new Error(error));
         }
         else if (tournament == null) {
-            next(new Error('Torunament does not exist'));
+            next(new Error('Tournament does not exist'));
         }
         else {
             response.send(tournament.matches || []);
@@ -36,9 +36,9 @@ exports.add = function (request, response, next) {
                 error = 'Tournament does not exist for given Organizer';
             } else if (!data.team1 || !data.team2 || !data.result) {
                 error = 'Match is not complete';
-            } else if (!_each(data.team1.concat(data.team2), every(function (player) {
+            } else if (!_.each(data.team1.concat(data.team2), function (player) {
                     return _.contains(tournament.participants, player);
-                }))) {
+                })) {
                 error = 'Not all players are participants';
             } else if (data.result.length < 2) {
                 error = 'Match result is not complete';

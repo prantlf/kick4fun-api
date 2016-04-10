@@ -1,0 +1,825 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "kick4fun Rest API server.",
+    "version": "1.0.0",
+    "title": "Swagger kick4fun-api",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": ""
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "kick4fun.com",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "1 organizers",
+      "description": "Organizers"
+    },
+    {
+      "name": "2 players",
+      "description": "Players"
+    },
+    {
+      "name": "3 tournaments",
+      "description": "Tournaments"
+    },
+    {
+      "name": "4 participants",
+      "description": "Participants"
+    },
+    {
+      "name": "5 matches",
+      "description": "Matches"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/organizers": {
+      "get": {
+        "tags": [
+          "1 organizers"
+        ],
+        "summary": "Get organizers",
+        "description": "",
+        "operationId": "getOrganizers",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Organizer"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "1 organizers"
+        ],
+        "summary": "Add new organizer",
+        "description": "",
+        "operationId": "addOrganizer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Organizer to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Organizer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Organizer"
+            }
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}": {
+      "get": {
+        "tags": [
+          "1 organizers"
+        ],
+        "summary": "Get organizer",
+        "description": "",
+        "operationId": "getOrganizer",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Organizer"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "1 organizers"
+        ],
+        "summary": "Update organizer",
+        "description": "",
+        "operationId": "updateOrganizer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Organizer data to be updated",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Organizer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Organizer"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "1 organizers"
+        ],
+        "summary": "Delete organizer",
+        "description": "",
+        "operationId": "deleteOrganizer",
+        "responses": {
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/players": {
+      "get": {
+        "tags": [
+          "2 players"
+        ],
+        "summary": "Get all players",
+        "description": "",
+        "operationId": "getAllPlayers",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}/players": {
+      "get": {
+        "tags": [
+          "2 players"
+        ],
+        "summary": "Get players",
+        "description": "",
+        "operationId": "getPlayers",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Player"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "2 players"
+        ],
+        "summary": "Add new player to organizer",
+        "description": "",
+        "operationId": "addPlayer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Player to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}/players/{playerName}": {
+      "get": {
+        "tags": [
+          "2 players"
+        ],
+        "summary": "Get player",
+        "description": "",
+        "operationId": "getPlayer",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "2 players"
+        ],
+        "summary": "Update player",
+        "description": "",
+        "operationId": "updatePlayer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Player data to be updated",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "2 players"
+        ],
+        "summary": "Delete player",
+        "description": "",
+        "operationId": "deletePlayer",
+        "responses": {
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/tournaments": {
+      "get": {
+        "tags": [
+          "3 tournaments"
+        ],
+        "summary": "Get all tournaments",
+        "description": "",
+        "operationId": "getAllTournaments",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Tournament"
+            }
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}/tournaments": {
+      "get": {
+        "tags": [
+          "3 tournaments"
+        ],
+        "summary": "Get tournaments",
+        "description": "",
+        "operationId": "getTournaments",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tournament"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "3 tournaments"
+        ],
+        "summary": "Add new tournament",
+        "description": "",
+        "operationId": "addTournament",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Tournament to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Tournament"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Tournament"
+            }
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}/tournaments/{tournamentName}": {
+      "get": {
+        "tags": [
+          "3 tournaments"
+        ],
+        "summary": "Get tournament",
+        "description": "",
+        "operationId": "getTournament",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Tournament"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "3 tournaments"
+        ],
+        "summary": "Update tournament",
+        "description": "",
+        "operationId": "updateTournament",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Tournament to be updated",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Tournament"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Tournament"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "3 tournaments"
+        ],
+        "summary": "Delete tournament",
+        "description": "",
+        "operationId": "deleteTournament",
+        "responses": {
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}/tournaments/{tournamentName}/prepare": {
+      "put": {
+        "tags": [
+          "3 tournaments"
+        ],
+        "summary": "Prepare tournament",
+        "description": "",
+        "operationId": "prepareTournament",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Tournament"
+            }
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}/tournaments/{tournamentName}/start": {
+      "put": {
+        "tags": [
+          "3 tournaments"
+        ],
+        "summary": "Start tournament",
+        "description": "",
+        "operationId": "startTournament",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Tournament"
+            }
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}/tournaments/{tournamentName}/finish": {
+      "put": {
+        "tags": [
+          "3 tournaments"
+        ],
+        "summary": "Finish tournament",
+        "description": "Not yet implemented.",
+        "operationId": "finishTournament",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Tournament"
+            }
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}/tournaments/{tournamentName}/archive": {
+      "put": {
+        "tags": [
+          "3 tournaments"
+        ],
+        "summary": "Archive tournament",
+        "description": "Not yet implemented.",
+        "operationId": "archiveTournament",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Tournament"
+            }
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}/tournaments/{tournamentName}/participants": {
+      "get": {
+        "tags": [
+          "4 participants"
+        ],
+        "summary": "Get participants of tournament",
+        "description": "",
+        "operationId": "getParticipants",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "4 participants"
+        ],
+        "summary": "Add new participant to tournament",
+        "description": "",
+        "operationId": "addParticipant",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Participant to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Participant"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}/tournaments/{tournamentName}/participants/{participantName}": {
+      "delete": {
+        "tags": [
+          "4 participants"
+        ],
+        "summary": "Remove participant from tournament",
+        "description": "",
+        "operationId": "removeParticipant",
+        "responses": {
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}/tournaments/{tournamentName}/matches": {
+      "get": {
+        "tags": [
+          "5 matches"
+        ],
+        "summary": "Get matches of tournament",
+        "description": "",
+        "operationId": "getMatches",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Match"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "5 matches"
+        ],
+        "summary": "Add new match to tournament",
+        "description": "",
+        "operationId": "addMatch",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Match to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Match"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Tournament"
+            }
+          }
+        }
+      }
+    },
+    "/organizers/{organizerName}/tournaments/{tournamentName}/matches/{matchNumber}": {
+      "get": {
+        "tags": [
+          "5 matches"
+        ],
+        "summary": "Get match",
+        "description": "Not yet implemented.",
+        "operationId": "getMatch",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Match"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "5 matches"
+        ],
+        "summary": "Update match",
+        "description": "",
+        "operationId": "updatMatch",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Match data to be updated",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Match"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Match"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "5 matches"
+        ],
+        "summary": "Delete match",
+        "description": "",
+        "operationId": "deleteMatch",
+        "responses": {
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Organizer": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unchangeable unique name"
+        },
+        "longName": {
+          "type": "string",
+          "description": "Changeable unique name"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Player": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unchangeable unique name"
+        },
+        "nickName": {
+          "type": "string",
+          "description": "Changeable nick name"
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Changeable full name"
+        }
+      }
+    },
+    "Tournament": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unchangeable name unique within the organization"
+        },
+        "longName": {
+          "type": "string",
+          "description": "Changeable name unique within the organization"
+        },
+        "description": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "description": "Tournament kind",
+          "enum": [
+            "Challenge",
+            "League"
+          ]
+        }
+      }
+    },
+    "Participant": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Player name - must exist for given organizer"
+        }
+      }
+    },
+    "Match": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "date"
+        },
+        "team1": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "team2": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      }
+    }
+  }
+}

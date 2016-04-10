@@ -24,8 +24,7 @@ exports.start = function (challenge) {
             player: challenge.lineUp[i].player,
             score: challenge.lineUp[i].score,
             fineScore: challenge.lineUp[i].fineScore,
-            level: challenge.lineUp[i].level,
-            numMatches: challenge.lineUp[i].numMatches
+            level: challenge.lineUp[i].level
         });
         challenge.standings.push(clone);
     }
@@ -144,19 +143,22 @@ function calculateStandings(standings, match, options) {
     looserLevels.push(_.findWhere(standings, {player: match.loosers[0]}).level);
     looserLevels.push(_.findWhere(standings, {player: match.loosers[1]}).level);
     var looserLevelAverage = (looserLevels[0] + looserLevels[1]) / 2;
-    var winnerGoals = Math.max(match.goals) | match.goals[0];
-    var looserGoals = Math.min(match.goals) | match.goals[0];
+    var winnerSets = _.max(match.sets) || match.sets[0];
+    var looserSets = _.min(match.sets) || match.sets[0];
+    var winnerGoals = _.max(match.goals) || match.goals[0];
+    var looserGoals = _.min(match.goals) || match.goals[0];
+    var scoreFraction = 1 - (looserSets / winnerSets);
     for (var i = 0; i < standings.length; i++) {
         if (_.contains(match.winners, standings[i].player)) {
             standings[i].wins += 1;
             standings[i].goalsScored += winnerGoals;
             standings[i].goalsShipped += looserGoals;
-            standings[i].score += (looserLevelAverage + options.matchPoints);
+            standings[i].score += (looserLevelAverage * scoreFraction + options.matchPoints);
         } else if (_.contains(match.loosers, standings[i].player)) {
             standings[i].losses += 1;
             standings[i].goalsScored += looserGoals;
             standings[i].goalsShipped += winnerGoals;
-            standings[i].score -= (standings[i].level - options.matchPoints);
+            standings[i].score -= (standings[i].level * scoreFraction - options.matchPoints);
         }
     }
 }

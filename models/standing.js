@@ -18,6 +18,10 @@ const StandingSchema = new Schema({
         type: Number,
         default: 0
     },
+    total: {
+        type: Number,
+        default: 0
+    },
     wins: {
         type: Number,
         default: 0
