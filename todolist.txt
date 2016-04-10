@@ -1,6 +1,9 @@
 
 // todo: participants add to challenge - wann added !!!
-// todo: beispiel !!!
+
+// todo: check free matches
+// todo: participants zur Laufzeit
+// todo: challenge schema für swagger
 // todo: get single match
 // todo: challenge: doppelte Matches verbieten
 // todo: löschbedingungen

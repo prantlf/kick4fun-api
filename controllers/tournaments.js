@@ -34,7 +34,7 @@ exports.list = function (request, response, next) {
 exports.listOne = function (request, response, next) {
     var organizerId = request.params.id;
     var tournamentName = request.params.name;
-    Tournament.find({_organizer: organizerId, 'name': tournamentName}, function (error, tournament) {
+    Tournament.findOne({_organizer: organizerId, 'name': tournamentName}, function (error, tournament) {
         if (error) {
             next(new Error(error));
         } else if (tournament == null) {

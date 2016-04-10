@@ -1,0 +1,46 @@
+POST /api/v1/organizers
+{
+  "name": "OTSAP",
+  "longName": "OTSAP Kickerliga"
+}
+
+POST /api/v1/organizers/OTSAP/players
+{
+  "name": "Ferdinand",
+  "nickName": "Ferda",
+  "fullName": "Ferdinand Prantl"
+}
+... mindestens 4
+
+POST /api/v1/organizers/OTSAP/tournaments
+{
+  "name": "ch2016",
+  "longName": "Sommer-Challenge 2016",
+  "kind": "Challenge"
+}
+--> status: build
+
+POST /api/v1/organizers/OTSAP/tournaments/ch2016/participants
+{
+  "name": "Ferdinand"
+}
+... mindestens 4
+
+POST /api/v1/organizers/OTSAP/tournaments/ch2016/prepare
+--> status: ready
+
+POST /api/v1/organizers/OTSAP/tournaments/ch2016/start
+--> status: progress
+
+POST /api/v1/organizers/OTSAP/tournaments/ch2016/matches
+{
+  "team1": [
+    "Stefano", "Claus"
+  ],
+  "team2": [
+    "Ferdinand", "Reinhard"
+  ],
+  "result": [
+    10,7,8,10,5,10
+  ]
+}

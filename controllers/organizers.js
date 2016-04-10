@@ -36,7 +36,7 @@ exports.create = function (request, response, next) {
     });
     organizer.save(function (error, organizer) {
         if (error) {
-            response.send(error);
+            next(new Error(error));
         } else {
             response.send(organizer);
         }

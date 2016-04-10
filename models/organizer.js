@@ -13,14 +13,6 @@ const OrganizerSchema = new Schema({
     description: {
         type: String,
         default: ''
-    },
-    adminUser: {
-        type: String,
-        default: ''
-    },
-    adminPassword: {
-        type: String,
-        default: ''
     }
 }, {
     timestamps: true
