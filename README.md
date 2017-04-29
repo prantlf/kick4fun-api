@@ -31,3 +31,6 @@ sc.exe create MongoDB binPath= "C:\Program Files\MongoDB\Server\3.2\bin\mongod.e
 Remove service:
 sc.exe delete MongoDB
 
+
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/prantlf/kick4fun-api.svg)](https://greenkeeper.io/)
